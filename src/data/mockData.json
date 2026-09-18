@@ -360,7 +360,10 @@
           "name": "Hotel Confirmations",
           "url": "https://drive.google.com/file/d/placeholder-hotel-conf",
           "type": "application/pdf",
-          "assignedTravelerIds": [],
+          "assignedTravelerIds": [
+            "traveler-1",
+            "traveler-2"
+          ],
           "pinned": false
         },
         {
@@ -763,7 +766,9 @@
           "name": "Day 2 Call Sheet",
           "url": "https://drive.google.com/file/d/placeholder-callsheet-2",
           "type": "application/pdf",
-          "assignedTravelerIds": [],
+          "assignedTravelerIds": [
+            "traveler-8"
+          ],
           "pinned": false
         }
       ],
