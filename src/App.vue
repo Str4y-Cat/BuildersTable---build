@@ -1,6 +1,10 @@
 <template>
   <div class="min-h-screen bg-background">
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <Transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
     <Toaster />
   </div>
 </template>

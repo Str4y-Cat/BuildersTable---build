@@ -128,3 +128,13 @@
     cursor: pointer;
     }
 }
+
+/* Route fade — Phase 8 polish */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 150ms ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

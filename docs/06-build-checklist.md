@@ -13,57 +13,57 @@ Work top to bottom. Check items off as you go. Details live in the sibling docs.
 
 ## Phase 2 — Trip detail shell
 
-- [ ] Replace stub in `TripDetail.vue`
-- [ ] Load trip by route `tripId`; not-found state
-- [ ] `TripHeader` + back link to `/dashboard`
-- [ ] 60/40 layout (stack on mobile)
-- [ ] Wire store (read-only first is fine)
+- [x] Replace stub in `TripDetail.vue`
+- [x] Load trip by route `tripId`; not-found state
+- [x] `TripHeader` + back link to `/dashboard`
+- [x] 60/40 layout (stack on mobile)
+- [x] Wire store (read-only first is fine)
 
 ## Phase 3 — Itinerary
 
-- [ ] Add shadcn Input, Textarea, Label, Dialog, Select as needed
-- [ ] `ItineraryTimeline` day groups
-- [ ] `ItineraryItemCard` with type badge, assignment, `ResponseRollup`
-- [ ] `ItineraryItemForm` add/edit dialog (incl. assign travelers + `call-time`)
-- [ ] Delete item with confirm dialog
-- [ ] Edit updates `lastUpdatedAt`
+- [x] Add shadcn Input, Textarea, Label, Dialog, Select as needed
+- [x] `ItineraryTimeline` day groups
+- [x] `ItineraryItemCard` with type badge, assignment, `ResponseRollup`
+- [x] `ItineraryItemForm` add/edit dialog (incl. assign travelers + `call-time`)
+- [x] Delete item with confirm dialog
+- [x] Edit updates `lastUpdatedAt`
 
 ## Phase 4 — Travelers + documents
 
-- [ ] `TravelerList` + `TravelerForm`
-- [ ] `ShareLinkButton` copy `/trips/{shareCode}` + toast
-- [ ] Remove traveler with confirm
-- [ ] `DocumentList` (links only)
+- [x] `TravelerList` + `TravelerForm`
+- [x] `ShareLinkButton` copy `/trips/{shareCode}` + toast
+- [x] Remove traveler with confirm
+- [x] `DocumentList` (links only)
 
 ## Phase 5 — Notify
 
-- [ ] `NotificationComposer` dialog
-- [ ] Channel toggles + message preview
-- [ ] On send: toast, `notificationLogs`, reset responses to `pending`
-- [ ] Optional: show last notify preview on entry
+- [x] `NotificationComposer` dialog
+- [x] Channel toggles + message preview
+- [x] On send: toast, `notificationLogs`, reset responses to `pending`
+- [x] Optional: show last notify preview on entry
 
 ## Phase 6 — Traveler view
 
-- [ ] Replace stub in `TravelerView.vue`
-- [ ] Resolve `shareCode`; not-found state
-- [ ] Greeting + filtered timeline
-- [ ] Updated badge + Confirm/Decline
-- [ ] Status after respond; allow change
-- [ ] Contact curator CTA
+- [x] Replace stub in `TravelerView.vue`
+- [x] Resolve `shareCode`; not-found state
+- [x] Greeting + filtered timeline
+- [x] Updated badge + Confirm/Decline
+- [x] Status after respond; allow change
+- [x] Contact curator CTA
 
 ## Phase 7 — Dashboard polish
 
-- [ ] Search (and optional status filter)
-- [ ] `NewTripDialog` → create + navigate
-- [ ] Fix status badge colors (ongoing = orange, not destructive)
-- [ ] Point card actions at store where useful
+- [x] Search (and optional status filter)
+- [x] `NewTripDialog` → create + navigate
+- [x] Fix status badge colors (ongoing = orange, not destructive)
+- [x] Point card actions at store where useful
 
 ## Phase 8 — Polish + demo
 
-- [ ] Mobile pass on all three screens
-- [ ] Light transitions / toast consistency per [04-design-themes.md](./04-design-themes.md)
-- [ ] Rehearse demo path from [02-user-flows.md](./02-user-flows.md)
-- [ ] Confirm success criteria in [01-mock-finish-plan.md](./01-mock-finish-plan.md)
+- [x] Mobile pass on all three screens
+- [x] Light transitions / toast consistency per [04-design-themes.md](./04-design-themes.md)
+- [x] Rehearse demo path from [02-user-flows.md](./02-user-flows.md)
+- [x] Confirm success criteria in [01-mock-finish-plan.md](./01-mock-finish-plan.md)
 
 ## Done when
 

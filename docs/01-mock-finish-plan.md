@@ -68,13 +68,13 @@ Do not rename routes to Laravel `/curator/...` or `/t/{token}` in the mock.
 
 ## Success criteria
 
-- [ ] Curator can browse trips and open trip detail.
-- [ ] Curator can add/edit/delete itinerary items with traveler assignment.
-- [ ] Curator sees per-entry confirm/decline rollup.
-- [ ] Curator can run simulated Notify (toast + pending reset + optional log).
-- [ ] Traveler share link shows filtered itinerary and supports confirm/decline.
-- [ ] Traveler response updates curator rollup in the same browser session.
-- [ ] UI matches [04-design-themes.md](./04-design-themes.md); demo path works without a backend.
+- [x] Curator can browse trips and open trip detail.
+- [x] Curator can add/edit/delete itinerary items with traveler assignment.
+- [x] Curator sees per-entry confirm/decline rollup.
+- [x] Curator can run simulated Notify (toast + pending reset + optional log).
+- [x] Traveler share link shows filtered itinerary and supports confirm/decline.
+- [x] Traveler response updates curator rollup in the same browser session.
+- [x] UI matches [04-design-themes.md](./04-design-themes.md); demo path works without a backend.
 
 ## Explicitly out of scope
 

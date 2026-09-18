@@ -30,6 +30,7 @@ Curator manages itinerary → assigns travelers → notifies (simulated) → tra
 3. Lock visuals with [04-design-themes.md](./04-design-themes.md).
 4. Extend data/state per [05-mock-data-and-state.md](./05-mock-data-and-state.md).
 5. Work through [06-build-checklist.md](./06-build-checklist.md).
+6. Rehearse the pitch walkthrough with [07-demo-path.md](./07-demo-path.md).
 
 ## Doc index
 
@@ -41,9 +42,9 @@ Curator manages itinerary → assigns travelers → notifies (simulated) → tra
 | [04-design-themes.md](./04-design-themes.md) | Tokens, layout, badges, motion |
 | [05-mock-data-and-state.md](./05-mock-data-and-state.md) | Types, seed rules, in-memory store |
 | [06-build-checklist.md](./06-build-checklist.md) | Checkbox implementation order |
+| [07-demo-path.md](./07-demo-path.md) | Pitch rehearsal walkthrough |
 
 ## Baseline today
 
-- **Built:** `/dashboard` (trip grid, header, toast-only actions)
-- **Stubs:** `/dashboard/trips/:tripId`, `/trips/:shareCode`
+- **Built:** full mock loop — dashboard, trip detail (itinerary/travelers/notify), traveler share view
 - **Legacy overview:** root [`PROJECT_SUMMARY.md`](../PROJECT_SUMMARY.md) — superseded for finish work by this folder when they conflict
