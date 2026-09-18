@@ -59,8 +59,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { toast } from 'vue-sonner'
-import mockDataJson from '@/data/mockData.json'
-import type { MockData } from '@/types'
+import { useTripsStore } from '@/stores/trips'
 import TripCard from '@/components/TripCard.vue'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -72,13 +71,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Plus, ChevronDown, CalendarDays } from '@lucide/vue'
 
-const mockData = mockDataJson as MockData
-const currentUser = mockData.currentUser
-const trips = mockData.trips
+const { currentUser, trips } = useTripsStore()
 
 const userInitials = computed(() => {
-  const names = currentUser.name.split(' ')
-  return names.map(n => n[0]).join('').toUpperCase()
+  const names = currentUser.value.name.split(' ')
+  return names.map((n) => n[0]).join('').toUpperCase()
 })
 
 const handleNewTrip = () => {

@@ -1,5 +1,7 @@
 # TravelBuddy V1 Mock - Project Summary
 
+> **Finish the mock using [`docs/`](./docs/README.md).** That folder is the current plan for the richer curator → notify → confirm/decline loop, design themes, and build checklist. Prefer it over this file when they conflict.
+
 ## Overview
 Building a **non-functional mockup** for TravelBuddy — a group travel itinerary management tool where one curator manages trips and keeps travelers informed.
 
