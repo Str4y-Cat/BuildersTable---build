@@ -16,7 +16,7 @@
 
       <!-- Found -->
       <template v-else>
-        <div class="mb-6">
+        <div class="mb-8">
           <button
             type="button"
             class="mb-4 inline-flex items-center text-sm text-muted-foreground transition-opacity hover:text-foreground hover:opacity-80"
@@ -28,14 +28,14 @@
           <TripHeader :trip="trip" />
         </div>
 
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-5">
-          <!-- Itinerary ~60% -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-5 lg:gap-8">
+          <!-- Itinerary -->
           <section class="space-y-4 lg:col-span-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-baseline gap-2">
                 <h2 class="text-lg font-semibold">Itinerary</h2>
                 <span class="text-sm text-muted-foreground">
-                  {{ trip.itinerary.length }} items
+                  {{ trip.itinerary.length }} events
                 </span>
               </div>
               <Button size="sm" @click="openCreate">
@@ -52,40 +52,12 @@
               @delete="askDelete"
               @notify="openNotify"
             />
-
-            <!-- Mobile: reveal travelers & documents -->
-            <Button
-              class="w-full lg:hidden"
-              variant="outline"
-              @click="mobileSidebarOpen = !mobileSidebarOpen"
-            >
-              <ChevronDown
-                class="mr-2 h-4 w-4 transition-transform"
-                :class="mobileSidebarOpen ? 'rotate-180' : ''"
-              />
-              Travelers &amp; documents
-              <span class="ml-1 text-muted-foreground">
-                ({{ trip.travelers.length }} · {{ trip.documents.length }})
-              </span>
-            </Button>
           </section>
 
-          <!-- Sidebar ~40% — always on lg; collapsible on mobile -->
-          <aside
-            class="space-y-8 lg:col-span-2"
-            :class="mobileSidebarOpen ? 'block' : 'hidden lg:block'"
-          >
+          <!-- Right: Travelers + Documents (collapsible, default closed) -->
+          <aside class="space-y-4 lg:col-span-2">
             <TravelerList :trip="trip" />
-
-            <section class="space-y-3">
-              <div class="flex items-baseline justify-between gap-2">
-                <h2 class="text-lg font-semibold">Documents</h2>
-                <span class="text-sm text-muted-foreground">
-                  {{ trip.documents.length }}
-                </span>
-              </div>
-              <DocumentList :documents="trip.documents" />
-            </section>
+            <DocumentList :trip="trip" :documents="trip.documents" collapsible />
           </aside>
         </div>
 
@@ -154,7 +126,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { ArrowLeft, Plus, ChevronDown } from '@lucide/vue'
+import { ArrowLeft, Plus } from '@lucide/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -171,7 +143,6 @@ const deleteTarget = ref<ItineraryItem | null>(null)
 const deleteOpen = ref(false)
 const notifyOpen = ref(false)
 const notifyItem = ref<ItineraryItem | null>(null)
-const mobileSidebarOpen = ref(false)
 const highlightItemId = ref<string | null>(null)
 let highlightTimer: ReturnType<typeof setTimeout> | null = null
 

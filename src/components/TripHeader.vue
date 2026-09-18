@@ -1,12 +1,33 @@
 <template>
   <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-    <div class="min-w-0 space-y-2">
+    <div class="min-w-0 space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <Badge :class="tripBadgeClass[trip.badge]">
+          {{ tripBadgeLabel[trip.badge] }}
+        </Badge>
+        <Badge
+          v-for="tag in trip.tags"
+          :key="tag"
+          variant="outline"
+          class="font-normal"
+        >
+          {{ tripTagLabel[tag] }}
+        </Badge>
+      </div>
+
       <h1 class="text-2xl font-bold tracking-tight">{{ trip.name }}</h1>
       <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
       <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
+      <p
+        v-if="trip.description"
+        class="max-w-2xl text-sm text-muted-foreground"
+      >
+        {{ trip.description }}
+      </p>
+
       <div class="flex flex-wrap gap-2 pt-1">
         <Badge variant="secondary">{{ trip.travelers.length }} travelers</Badge>
-        <Badge variant="secondary">{{ trip.itinerary.length }} items</Badge>
+        <Badge variant="secondary">{{ trip.itinerary.length }} events</Badge>
         <Badge variant="outline">{{ pendingCount }} pending</Badge>
       </div>
     </div>
@@ -30,6 +51,7 @@ import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import type { Trip } from '@/types'
 import { displayDateRange, responseRollup } from '@/lib/tripHelpers'
+import { tripBadgeClass, tripBadgeLabel, tripTagLabel } from '@/lib/tripLabels'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ExternalLink } from '@lucide/vue'

@@ -1,50 +1,63 @@
 <template>
-  <section class="space-y-3">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-baseline gap-2">
+  <section class="rounded-xl border">
+    <div class="flex flex-wrap items-center gap-2 px-4 py-3">
+      <button
+        type="button"
+        class="flex min-w-0 flex-1 items-center gap-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+        :aria-expanded="open"
+        @click="open = !open"
+      >
+        <ChevronDown
+          class="h-4 w-4 shrink-0 text-muted-foreground transition-transform"
+          :class="open ? 'rotate-180' : ''"
+        />
         <h2 class="text-lg font-semibold">Travelers</h2>
         <span class="text-sm text-muted-foreground">{{ trip.travelers.length }}</span>
-      </div>
-      <Button size="sm" @click="formOpen = true">
+      </button>
+      <Button size="sm" class="shrink-0" @click.stop="formOpen = true">
         <Plus class="mr-2 h-4 w-4" />
         Add traveler
       </Button>
     </div>
 
-    <div
-      v-if="trip.travelers.length === 0"
-      class="rounded-lg border border-dashed p-4 text-sm text-muted-foreground"
-    >
-      No travelers yet.
-    </div>
-
-    <ul v-else class="divide-y rounded-lg border">
-      <li
-        v-for="traveler in trip.travelers"
-        :key="traveler.id"
-        class="space-y-2 px-4 py-3"
+    <div v-show="open" class="space-y-3 border-t px-4 py-3">
+      <div
+        v-if="trip.travelers.length === 0"
+        class="rounded-lg border border-dashed p-4 text-sm text-muted-foreground"
       >
-        <div class="min-w-0">
-          <p class="font-medium">{{ traveler.name }}</p>
-          <p class="text-sm text-muted-foreground">{{ traveler.roleOnProduction }}</p>
-          <p class="text-sm text-muted-foreground truncate">{{ traveler.email }}</p>
-          <p v-if="traveler.phone" class="text-sm text-muted-foreground">
-            {{ traveler.phone }}
-          </p>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <ShareLinkButton :share-code="traveler.shareCode" />
-          <Button
-            variant="ghost"
-            size="sm"
-            class="text-destructive hover:text-destructive"
-            @click="askRemove(traveler)"
-          >
-            Remove
-          </Button>
-        </div>
-      </li>
-    </ul>
+        No travelers yet.
+      </div>
+
+      <ul v-else class="divide-y rounded-lg border">
+        <li
+          v-for="traveler in trip.travelers"
+          :key="traveler.id"
+          class="flex flex-wrap items-start justify-between gap-3 px-4 py-3"
+        >
+          <div class="min-w-0 flex-1 space-y-0.5">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <p class="font-medium">{{ traveler.name }}</p>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <ShareLinkButton :share-code="traveler.shareCode" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  class="text-destructive hover:text-destructive"
+                  @click="askRemove(traveler)"
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+            <p class="text-sm text-muted-foreground">{{ traveler.roleOnProduction }}</p>
+            <p class="text-sm text-muted-foreground truncate">{{ traveler.email }}</p>
+            <p v-if="traveler.phone" class="text-sm text-muted-foreground">
+              Tel. {{ traveler.phone }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
 
     <TravelerForm v-model:open="formOpen" :trip="trip" />
 
@@ -83,7 +96,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { Plus } from '@lucide/vue'
+import { ChevronDown, Plus } from '@lucide/vue'
 
 const props = defineProps<{
   trip: Trip
@@ -91,6 +104,8 @@ const props = defineProps<{
 
 const { removeTraveler } = useTripsStore()
 
+/** Default closed per trip page chrome */
+const open = ref(false)
 const formOpen = ref(false)
 const deleteTarget = ref<Traveler | null>(null)
 const deleteOpen = ref(false)
@@ -100,9 +115,9 @@ function askRemove(traveler: Traveler) {
   deleteOpen.value = true
 }
 
-function onDeleteOpenChange(open: boolean) {
-  deleteOpen.value = open
-  if (!open) deleteTarget.value = null
+function onDeleteOpenChange(value: boolean) {
+  deleteOpen.value = value
+  if (!value) deleteTarget.value = null
 }
 
 function confirmRemove() {
