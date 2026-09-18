@@ -29,24 +29,16 @@
     </header>
 
     <main class="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Input
           v-model="searchQuery"
           class="sm:max-w-xs"
           placeholder="Search trips…"
           type="search"
         />
-        <Select v-model="statusFilter">
-          <SelectTrigger class="w-full sm:w-44">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            <SelectItem value="upcoming">Upcoming</SelectItem>
-            <SelectItem value="ongoing">Ongoing</SelectItem>
-            <SelectItem value="past">Past</SelectItem>
-          </SelectContent>
-        </Select>
+        <p class="text-sm text-muted-foreground">
+          Board by trip status · {{ filteredTrips.length }} shown
+        </p>
       </div>
 
       <div v-if="trips.length === 0" class="py-12 text-center">
@@ -64,13 +56,11 @@
       <div v-else-if="filteredTrips.length === 0" class="py-12 text-center">
         <h2 class="mb-2 text-lg font-semibold">No matching trips</h2>
         <p class="text-sm text-muted-foreground">
-          Try a different search or status filter
+          Try a different search
         </p>
       </div>
 
-      <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <TripCard v-for="trip in filteredTrips" :key="trip.id" :trip="trip" />
-      </div>
+      <TripBoard v-else :trips="filteredTrips" />
     </main>
 
     <NewTripDialog v-model:open="newTripOpen" />
@@ -81,9 +71,7 @@
 import { computed, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
-import { tripStatus } from '@/lib/tripHelpers'
-import type { TripStatus } from '@/types'
-import TripCard from '@/components/TripCard.vue'
+import TripBoard from '@/components/TripBoard.vue'
 import NewTripDialog from '@/components/NewTripDialog.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -94,22 +82,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { Plus, ChevronDown, CalendarDays } from '@lucide/vue'
-
-type StatusFilter = 'all' | TripStatus
 
 const { currentUser, trips } = useTripsStore()
 
 const newTripOpen = ref(false)
 const searchQuery = ref('')
-const statusFilter = ref<StatusFilter>('all')
 
 const userInitials = computed(() => {
   const names = currentUser.value.name.split(' ')
@@ -118,16 +96,14 @@ const userInitials = computed(() => {
 
 const filteredTrips = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
-  return trips.value.filter((trip) => {
-    if (statusFilter.value !== 'all' && tripStatus(trip) !== statusFilter.value) {
-      return false
-    }
-    if (!q) return true
-    return (
+  if (!q) return trips.value
+  return trips.value.filter(
+    (trip) =>
       trip.name.toLowerCase().includes(q) ||
       (trip.destination?.toLowerCase().includes(q) ?? false) ||
-      trip.description.toLowerCase().includes(q)
-    )
-  })
+      trip.description.toLowerCase().includes(q) ||
+      trip.tags.some((tag) => tag.toLowerCase().includes(q)) ||
+      trip.badge.toLowerCase().includes(q)
+  )
 })
 </script>
