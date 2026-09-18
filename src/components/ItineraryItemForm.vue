@@ -4,31 +4,52 @@
       <DialogHeader>
         <DialogTitle>{{ item ? 'Edit entry' : 'Add entry' }}</DialogTitle>
         <DialogDescription>
-          {{ item ? 'Update this itinerary item.' : 'Create a new itinerary item for this trip.' }}
+          {{ item ? 'Update this itinerary event.' : 'Create a new itinerary event for this trip.' }}
         </DialogDescription>
       </DialogHeader>
 
       <form class="space-y-4" @submit.prevent="handleSubmit">
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="space-y-2">
-            <Label for="item-date">Date</Label>
-            <Input id="item-date" v-model="form.date" type="date" required />
+            <Label for="item-date" title="Event calendar date">Date</Label>
+            <Input
+              id="item-date"
+              v-model="form.date"
+              type="date"
+              required
+              title="When this event happens"
+            />
           </div>
           <div class="space-y-2">
-            <Label for="item-time">Time</Label>
-            <Input id="item-time" v-model="form.time" type="time" />
+            <Label for="item-time" title="Optional start time">Time</Label>
+            <Input
+              id="item-time"
+              v-model="form.time"
+              type="time"
+              title="Optional. If omitted, the event is done after that calendar day ends."
+            />
           </div>
         </div>
 
         <div class="space-y-2">
           <Label for="item-title">Title</Label>
-          <Input id="item-title" v-model="form.title" required placeholder="e.g. Call time — Unit base" />
+          <Input
+            id="item-title"
+            v-model="form.title"
+            required
+            placeholder="e.g. Call time — Unit base"
+            title="Short name shown on the timeline and progress tracker"
+          />
         </div>
 
         <div class="space-y-2">
-          <Label>Type</Label>
+          <Label for="item-type" title="Production event category">Type</Label>
           <Select v-model="form.type">
-            <SelectTrigger class="w-full">
+            <SelectTrigger
+              id="item-type"
+              class="w-full"
+              :title="itemTypeHint(form.type)"
+            >
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -36,16 +57,30 @@
                 v-for="type in ITINERARY_ITEM_TYPES"
                 :key="type"
                 :value="type"
+                :title="itemTypeHint(type)"
               >
-                {{ itemTypeLabel(type) }}
+                <span class="flex flex-col items-start gap-0.5 py-0.5">
+                  <span>{{ itemTypeLabel(type) }}</span>
+                  <span class="text-xs font-normal text-muted-foreground">
+                    {{ itemTypeHint(type) }}
+                  </span>
+                </span>
               </SelectItem>
             </SelectContent>
           </Select>
+          <p class="text-xs text-muted-foreground" :title="itemTypeHint(form.type)">
+            {{ itemTypeHint(form.type) }}
+          </p>
         </div>
 
         <div class="space-y-2">
           <Label for="item-location">Location</Label>
-          <Input id="item-location" v-model="form.location" placeholder="Optional" />
+          <Input
+            id="item-location"
+            v-model="form.location"
+            placeholder="Optional"
+            title="Venue or meeting point"
+          />
         </div>
 
         <div class="space-y-2">
@@ -54,58 +89,34 @@
             id="item-notes"
             v-model="form.description"
             placeholder="Optional details"
+            title="Extra context for crew"
           />
         </div>
 
-        <div class="space-y-2">
-          <Label>Assign travelers</Label>
-          <p class="text-xs text-muted-foreground">
-            Leave all unchecked for all travelers.
-            <template v-if="trip.autoNotifyOnAssign">
-              First-time assignees are auto-notified.
-            </template>
-            <template v-else>
-              Auto-notify on assign is off for this trip.
-            </template>
-          </p>
-          <div
-            v-if="trip.travelers.length === 0"
-            class="rounded-md border border-dashed p-3 text-sm text-muted-foreground"
-          >
-            No travelers on this trip yet.
-          </div>
-          <div v-else class="max-h-40 space-y-2 overflow-y-auto rounded-md border p-3">
-            <label
-              v-for="traveler in trip.travelers"
-              :key="traveler.id"
-              class="flex cursor-pointer items-start gap-2 text-sm"
-            >
-              <Checkbox
-                class="mt-0.5"
-                :model-value="selectedIds.includes(traveler.id)"
-                @update:model-value="(v) => toggleTraveler(traveler.id, v === true)"
-              />
-              <span class="min-w-0">
-                <span class="font-medium">{{ traveler.name }}</span>
-                <span class="text-muted-foreground">
-                  · {{ traveler.roleOnProduction }}
-                </span>
-                <span
-                  v-if="traveler.phone"
-                  class="mt-0.5 block text-xs text-muted-foreground"
-                >
-                  Tel. {{ traveler.phone }}
-                </span>
-              </span>
-            </label>
-          </div>
-        </div>
+        <EventTasksEditor v-model="draftTasks" />
+
+        <EventDocumentsPicker
+          v-model="linkedDocumentIds"
+          :documents="trip.documents"
+        />
+
+        <TravelerAssignPicker
+          ref="assignPicker"
+          v-model="selectedIds"
+          :travelers="trip.travelers"
+          :hint="assignHint"
+        />
 
         <DialogFooter>
-          <Button type="button" variant="outline" @click="emit('update:open', false)">
+          <Button
+            type="button"
+            variant="outline"
+            title="Discard changes"
+            @click="emit('update:open', false)"
+          >
             Cancel
           </Button>
-          <Button type="submit">
+          <Button type="submit" :title="item ? 'Save event changes' : 'Create event'">
             {{ item ? 'Save changes' : 'Add entry' }}
           </Button>
         </DialogFooter>
@@ -115,14 +126,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { toast } from 'vue-sonner'
-import type { ItineraryItem, ItineraryItemType, Trip } from '@/types'
+import type { EventTask, ItineraryItem, ItineraryItemType, Trip } from '@/types'
 import { newlyAssignedTravelerIds } from '@/lib/tripHelpers'
 import { useTripsStore } from '@/stores/trips'
-import { ITINERARY_ITEM_TYPES, itemTypeLabel } from '@/lib/itemTypeStyles'
+import { ITINERARY_ITEM_TYPES, itemTypeHint, itemTypeLabel } from '@/lib/itemTypeStyles'
+import EventDocumentsPicker from '@/components/EventDocumentsPicker.vue'
+import EventTasksEditor from '@/components/EventTasksEditor.vue'
+import TravelerAssignPicker from '@/components/TravelerAssignPicker.vue'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogContent,
@@ -164,6 +177,17 @@ const form = reactive({
 })
 
 const selectedIds = ref<string[]>([])
+const draftTasks = ref<EventTask[]>([])
+const linkedDocumentIds = ref<string[]>([])
+const assignPicker = ref<{ resetSearch: () => void } | null>(null)
+
+const assignHint = computed(() => {
+  const base = 'Search, then select. Leave unchecked for all travelers.'
+  if (props.trip.autoNotifyOnAssign) {
+    return `${base} First-time assignees are auto-notified.`
+  }
+  return `${base} Auto-notify on assign is off for this trip.`
+})
 
 function resetForm() {
   if (props.item) {
@@ -174,6 +198,8 @@ function resetForm() {
     form.location = props.item.location ?? ''
     form.description = props.item.description ?? ''
     selectedIds.value = [...props.item.assignedTravelerIds]
+    draftTasks.value = props.item.tasks.map((t) => ({ ...t }))
+    linkedDocumentIds.value = [...(props.item.documentIds ?? [])]
   } else {
     form.date = props.trip.startDate ?? props.trip.itinerary[0]?.date ?? ''
     form.time = ''
@@ -182,7 +208,10 @@ function resetForm() {
     form.location = ''
     form.description = ''
     selectedIds.value = []
+    draftTasks.value = []
+    linkedDocumentIds.value = []
   }
+  assignPicker.value?.resetSearch()
 }
 
 watch(
@@ -191,16 +220,6 @@ watch(
     if (isOpen) resetForm()
   }
 )
-
-function toggleTraveler(id: string, checked: boolean) {
-  if (checked) {
-    if (!selectedIds.value.includes(id)) {
-      selectedIds.value = [...selectedIds.value, id]
-    }
-  } else {
-    selectedIds.value = selectedIds.value.filter((x) => x !== id)
-  }
-}
 
 function handleSubmit() {
   const title = form.title.trim()
@@ -214,6 +233,10 @@ function handleSubmit() {
   const previousIds = props.item ? [...props.item.assignedTravelerIds] : undefined
   const allIds = props.trip.travelers.map((t) => t.id)
 
+  const tasks = draftTasks.value
+    .map((t) => ({ ...t, title: t.title.trim() }))
+    .filter((t) => t.title.length > 0)
+
   const payload = {
     date,
     time: form.time || undefined,
@@ -221,7 +244,9 @@ function handleSubmit() {
     type: form.type,
     location: form.location.trim() || undefined,
     description: form.description.trim() || undefined,
-    assignedTravelerIds: nextIds
+    assignedTravelerIds: nextIds,
+    tasks,
+    documentIds: [...linkedDocumentIds.value]
   }
 
   let itemId: string

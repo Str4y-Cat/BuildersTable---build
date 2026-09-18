@@ -20,12 +20,26 @@ const labels: Record<ItineraryItemType, string> = {
   other: 'Other'
 }
 
+const descriptions: Record<ItineraryItemType, string> = {
+  flight: 'Air travel legs — departures, arrivals, connections.',
+  accommodation: 'Hotels, housing, or overnight stays.',
+  activity: 'General production activity or outing.',
+  meal: 'Meals, catering, or hospitality blocks.',
+  transport: 'Ground transport — cars, vans, shuttles.',
+  'call-time': 'Crew or talent call / report times.',
+  other: 'Anything that doesn’t fit the other types.'
+}
+
 export function itemTypeBadgeClass(type: ItineraryItemType): string {
   return badgeClasses[type] ?? badgeClasses.other
 }
 
 export function itemTypeLabel(type: ItineraryItemType): string {
   return labels[type] ?? labels.other
+}
+
+export function itemTypeHint(type: ItineraryItemType): string {
+  return descriptions[type] ?? descriptions.other
 }
 
 export const ITINERARY_ITEM_TYPES: ItineraryItemType[] = [

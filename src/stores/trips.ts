@@ -116,8 +116,10 @@ export function useTripsStore() {
 
   const addItineraryItem = (
     tripId: string,
-    item: Omit<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'tasks'> &
-      Partial<Pick<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'tasks'>>
+    item: Omit<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'tasks' | 'documentIds'> &
+      Partial<
+        Pick<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'tasks' | 'documentIds'>
+      >
   ): ItineraryItem => {
     const trip = requireTrip(tripId)
     const next: ItineraryItem = {
@@ -130,7 +132,8 @@ export function useTripsStore() {
       type: item.type,
       assignedTravelerIds: item.assignedTravelerIds ?? [],
       lastUpdatedAt: item.lastUpdatedAt ?? new Date().toISOString(),
-      tasks: item.tasks ?? []
+      tasks: item.tasks ?? [],
+      documentIds: item.documentIds ?? []
     }
     trip.itinerary = [...trip.itinerary, next]
     trips.value = [...trips.value]
@@ -308,6 +311,10 @@ export function useTripsStore() {
   const removeDocument = (tripId: string, docId: string): void => {
     const trip = requireTrip(tripId)
     trip.documents = trip.documents.filter((d) => d.id !== docId)
+    trip.itinerary = trip.itinerary.map((item) => ({
+      ...item,
+      documentIds: (item.documentIds ?? []).filter((id) => id !== docId)
+    }))
     trips.value = [...trips.value]
   }
 

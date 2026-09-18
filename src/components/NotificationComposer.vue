@@ -34,31 +34,54 @@
           >
             No travelers on this trip to notify.
           </div>
-          <div v-else class="max-h-40 space-y-2 overflow-y-auto rounded-md border p-3">
-            <label
-              v-for="traveler in assigned"
-              :key="traveler.id"
-              class="flex cursor-pointer items-start gap-2 text-sm"
-            >
-              <Checkbox
-                class="mt-0.5"
-                :model-value="selectedIds.includes(traveler.id)"
-                @update:model-value="(v) => toggleRecipient(traveler.id, v === true)"
+          <template v-else>
+            <div class="relative">
+              <Search
+                class="pointer-events-none absolute top-1/2 left-2.5 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
               />
-              <span class="min-w-0">
-                <span class="font-medium">{{ traveler.name }}</span>
-                <span class="text-muted-foreground">
-                  · {{ traveler.roleOnProduction }}
+              <Input
+                v-model="recipientQuery"
+                type="search"
+                class="pl-8"
+                placeholder="Search assigned crew…"
+                title="Filter recipients before selecting"
+                autocomplete="off"
+              />
+            </div>
+            <div class="max-h-40 space-y-2 overflow-y-auto rounded-md border p-3">
+              <p
+                v-if="filteredAssigned.length === 0"
+                class="text-sm text-muted-foreground"
+              >
+                No matches
+              </p>
+              <label
+                v-for="traveler in filteredAssigned"
+                :key="traveler.id"
+                class="flex cursor-pointer items-start gap-2 text-sm"
+                :title="traveler.phone ? `Tel. ${traveler.phone}` : traveler.name"
+              >
+                <Checkbox
+                  class="mt-0.5"
+                  :model-value="selectedIds.includes(traveler.id)"
+                  @update:model-value="(v) => toggleRecipient(traveler.id, v === true)"
+                />
+                <span class="min-w-0">
+                  <span class="font-medium">{{ traveler.name }}</span>
+                  <span class="text-muted-foreground">
+                    · {{ traveler.roleOnProduction }}
+                  </span>
+                  <span
+                    v-if="traveler.phone"
+                    class="mt-0.5 block text-xs text-muted-foreground"
+                  >
+                    Tel. {{ traveler.phone }}
+                  </span>
                 </span>
-                <span
-                  v-if="traveler.phone"
-                  class="mt-0.5 block text-xs text-muted-foreground"
-                >
-                  Tel. {{ traveler.phone }}
-                </span>
-              </span>
-            </label>
-          </div>
+              </label>
+            </div>
+          </template>
         </div>
 
         <div class="space-y-2">
@@ -115,8 +138,10 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Search } from '@lucide/vue'
 
 const props = defineProps<{
   open: boolean
@@ -135,10 +160,22 @@ const emailChannel = ref(true)
 const telegramChannel = ref(true)
 const message = ref('')
 const selectedIds = ref<string[]>([])
+const recipientQuery = ref('')
 
 const assigned = computed(() =>
   props.item ? affectedTravelers(props.trip, props.item) : []
 )
+
+const filteredAssigned = computed(() => {
+  const q = recipientQuery.value.trim().toLowerCase()
+  if (!q) return assigned.value
+  return assigned.value.filter((t) => {
+    const hay = [t.name, t.roleOnProduction, t.email, t.phone ?? '']
+      .join(' ')
+      .toLowerCase()
+    return hay.includes(q)
+  })
+})
 
 const allSelected = computed(
   () =>
@@ -173,6 +210,7 @@ watch(
     telegramChannel.value = true
     message.value = defaultMessage(props.item)
     selectedIds.value = affectedTravelers(props.trip, props.item).map((t) => t.id)
+    recipientQuery.value = ''
   }
 )
 

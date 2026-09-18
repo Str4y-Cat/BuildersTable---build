@@ -38,11 +38,22 @@
         <h3
           class="font-medium leading-snug"
           :class="timeElapsed ? 'text-muted-foreground line-through' : ''"
+          :title="item.title"
         >
           {{ item.title }}
         </h3>
-        <p v-if="metaLine" class="text-sm text-muted-foreground">{{ metaLine }}</p>
-        <p v-if="item.description" class="text-sm text-muted-foreground line-clamp-2">
+        <p
+          v-if="metaLine"
+          class="text-sm text-muted-foreground"
+          :title="metaLine"
+        >
+          {{ metaLine }}
+        </p>
+        <p
+          v-if="item.description"
+          class="text-sm text-muted-foreground line-clamp-2"
+          :title="item.description"
+        >
           {{ item.description }}
         </p>
       </div>

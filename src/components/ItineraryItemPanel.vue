@@ -47,12 +47,14 @@
                   :id="`task-${task.id}`"
                   :model-value="task.done"
                   class="mt-0.5"
+                  :title="task.done ? 'Mark sub-task not done' : 'Mark sub-task done'"
                   @update:model-value="(v) => onTaskDone(task.id, v)"
                 />
                 <label
                   :for="`task-${task.id}`"
                   class="min-w-0 flex-1 cursor-pointer text-sm leading-snug"
                   :class="task.done ? 'text-muted-foreground line-through' : ''"
+                  :title="task.title"
                 >
                   {{ task.title }}
                 </label>
@@ -61,6 +63,7 @@
                   size="icon-sm"
                   class="shrink-0 text-muted-foreground hover:text-destructive"
                   :aria-label="`Remove ${task.title}`"
+                  :title="`Remove “${task.title}”`"
                   @click="removeTask(task.id)"
                 >
                   <X class="h-3.5 w-3.5" />
@@ -80,11 +83,51 @@
                 placeholder="Add a sub-task…"
                 class="flex-1"
                 maxlength="120"
+                title="Checklist item under this event"
               />
-              <Button type="submit" variant="outline" :disabled="!newTaskTitle.trim()">
+              <Button
+                type="submit"
+                variant="outline"
+                :disabled="!newTaskTitle.trim()"
+                :title="
+                  newTaskTitle.trim()
+                    ? 'Add sub-task'
+                    : 'Enter a sub-task title first'
+                "
+              >
                 Add
               </Button>
             </form>
+          </section>
+
+          <!-- Documents linked to this event -->
+          <section class="space-y-3">
+            <EventDocumentsPicker
+              :documents="trip.documents"
+              :model-value="item.documentIds ?? []"
+              hint="Same links as in Edit entry — attach trip files to this event."
+              @update:model-value="onDocumentsChange"
+            />
+            <ul
+              v-if="linkedDocuments.length"
+              class="divide-y rounded-lg border"
+            >
+              <li
+                v-for="doc in linkedDocuments"
+                :key="doc.id"
+                class="px-3 py-2"
+              >
+                <a
+                  :href="doc.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm font-medium underline-offset-4 hover:underline"
+                  :title="doc.name"
+                >
+                  {{ doc.name }}
+                </a>
+              </li>
+            </ul>
           </section>
 
           <!-- Crew responses for this event -->
@@ -141,15 +184,26 @@
         </div>
 
         <SheetFooter class="border-t sm:flex-row sm:justify-stretch">
-          <Button class="w-full" variant="outline" @click="emit('notify', item)">
+          <Button
+            class="w-full"
+            variant="outline"
+            title="Notify assigned travelers about this event"
+            @click="emit('notify', item)"
+          >
             Notify
           </Button>
-          <Button class="w-full" variant="outline" @click="emit('edit', item)">
+          <Button
+            class="w-full"
+            variant="outline"
+            title="Edit event details and assignment"
+            @click="emit('edit', item)"
+          >
             Edit
           </Button>
           <Button
             class="w-full text-destructive hover:text-destructive"
             variant="ghost"
+            title="Delete this event from the itinerary"
             @click="emit('delete', item)"
           >
             Delete
@@ -173,6 +227,7 @@ import {
 import { itemTypeBadgeClass, itemTypeLabel } from '@/lib/itemTypeStyles'
 import { useTripsStore } from '@/stores/trips'
 import ResponseRollup from '@/components/ResponseRollup.vue'
+import EventDocumentsPicker from '@/components/EventDocumentsPicker.vue'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -201,7 +256,8 @@ const emit = defineEmits<{
   notify: [item: ItineraryItem]
 }>()
 
-const { setEventTaskDone, addEventTask, removeEventTask } = useTripsStore()
+const { setEventTaskDone, addEventTask, removeEventTask, updateItineraryItem } =
+  useTripsStore()
 const newTaskTitle = ref('')
 
 watch(
@@ -218,6 +274,12 @@ const updated = computed(() =>
 const taskProgress = computed(() =>
   props.item ? eventTaskProgress(props.item) : { done: 0, total: 0 }
 )
+
+const linkedDocuments = computed(() => {
+  if (!props.item) return []
+  const ids = new Set(props.item.documentIds ?? [])
+  return props.trip.documents.filter((d) => ids.has(d.id))
+})
 
 const metaLine = computed(() => {
   if (!props.item) return ''
@@ -296,6 +358,11 @@ function submitNewTask() {
   } catch {
     toast.error('Could not add sub-task')
   }
+}
+
+function onDocumentsChange(ids: string[]) {
+  if (!props.item) return
+  updateItineraryItem(props.trip.id, props.item.id, { documentIds: ids })
 }
 
 function initials(name: string): string {

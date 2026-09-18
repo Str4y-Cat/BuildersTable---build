@@ -83,6 +83,8 @@ export interface ItineraryItem {
    * The itinerary entry itself is an event, not a task.
    */
   tasks: EventTask[]
+  /** Trip documents linked to this event (by id). Empty = none. */
+  documentIds: string[]
 }
 
 export interface Document {

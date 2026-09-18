@@ -20,6 +20,7 @@
             v-model="form.name"
             required
             placeholder="Call sheet — Day 1.pdf"
+            title="Display name for this document"
           />
         </div>
 
@@ -31,13 +32,14 @@
             required
             type="url"
             placeholder="https://…"
+            title="Link to the file (mock — no real upload)"
           />
         </div>
 
         <div class="space-y-2">
           <Label for="doc-type">Type</Label>
           <Select v-model="form.type">
-            <SelectTrigger id="doc-type" class="w-full">
+            <SelectTrigger id="doc-type" class="w-full" title="Document type">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -52,7 +54,10 @@
           </Select>
         </div>
 
-        <label class="flex cursor-pointer items-center gap-2 text-sm">
+        <label
+          class="flex cursor-pointer items-center gap-2 text-sm"
+          title="Pinned documents appear at the top of the list"
+        >
           <Checkbox
             :model-value="form.pinned"
             @update:model-value="(v) => (form.pinned = v === true)"
@@ -63,55 +68,27 @@
           </span>
         </label>
 
-        <div class="space-y-2">
-          <Label>Assign crew</Label>
-          <p class="text-xs text-muted-foreground">
-            Leave all unchecked for all travelers (default).
-            <template v-if="trip.autoNotifyOnAssign">
-              First-time assignees are auto-notified.
-            </template>
-            <template v-else>
-              Auto-notify on assign is off for this trip.
-            </template>
-          </p>
-          <div
-            v-if="trip.travelers.length === 0"
-            class="rounded-md border border-dashed p-3 text-sm text-muted-foreground"
-          >
-            No travelers on this trip yet.
-          </div>
-          <div v-else class="max-h-48 space-y-2 overflow-y-auto rounded-md border p-3">
-            <label
-              v-for="traveler in trip.travelers"
-              :key="traveler.id"
-              class="flex cursor-pointer items-start gap-2 text-sm"
-            >
-              <Checkbox
-                class="mt-0.5"
-                :model-value="selectedIds.includes(traveler.id)"
-                @update:model-value="(v) => toggleTraveler(traveler.id, v === true)"
-              />
-              <span class="min-w-0">
-                <span class="font-medium">{{ traveler.name }}</span>
-                <span class="text-muted-foreground">
-                  · {{ traveler.roleOnProduction }}
-                </span>
-                <span
-                  v-if="traveler.phone"
-                  class="mt-0.5 block text-xs text-muted-foreground"
-                >
-                  Tel. {{ traveler.phone }}
-                </span>
-              </span>
-            </label>
-          </div>
-        </div>
+        <TravelerAssignPicker
+          ref="assignPicker"
+          v-model="selectedIds"
+          :travelers="trip.travelers"
+          label="Assign crew"
+          :hint="assignHint"
+        />
 
         <DialogFooter>
-          <Button type="button" variant="outline" @click="emit('update:open', false)">
+          <Button
+            type="button"
+            variant="outline"
+            title="Discard changes"
+            @click="emit('update:open', false)"
+          >
             Cancel
           </Button>
-          <Button type="submit">
+          <Button
+            type="submit"
+            :title="document ? 'Save document changes' : 'Add document to trip'"
+          >
             {{ document ? 'Save changes' : 'Add document' }}
           </Button>
         </DialogFooter>
@@ -121,11 +98,12 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { toast } from 'vue-sonner'
 import type { Document, Trip } from '@/types'
 import { newlyAssignedTravelerIds } from '@/lib/tripHelpers'
 import { useTripsStore } from '@/stores/trips'
+import TravelerAssignPicker from '@/components/TravelerAssignPicker.vue'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -174,6 +152,15 @@ const form = reactive({
 })
 
 const selectedIds = ref<string[]>([])
+const assignPicker = ref<{ resetSearch: () => void } | null>(null)
+
+const assignHint = computed(() => {
+  const base = 'Search, then select. Leave unchecked for all travelers (default).'
+  if (props.trip.autoNotifyOnAssign) {
+    return `${base} First-time assignees are auto-notified.`
+  }
+  return `${base} Auto-notify on assign is off for this trip.`
+})
 
 function resetForm() {
   if (props.document) {
@@ -189,6 +176,7 @@ function resetForm() {
     form.pinned = false
     selectedIds.value = []
   }
+  assignPicker.value?.resetSearch()
 }
 
 watch(
@@ -197,16 +185,6 @@ watch(
     if (isOpen) resetForm()
   }
 )
-
-function toggleTraveler(id: string, checked: boolean) {
-  if (checked) {
-    if (!selectedIds.value.includes(id)) {
-      selectedIds.value = [...selectedIds.value, id]
-    }
-  } else {
-    selectedIds.value = selectedIds.value.filter((x) => x !== id)
-  }
-}
 
 function handleSubmit() {
   const name = form.name.trim()
