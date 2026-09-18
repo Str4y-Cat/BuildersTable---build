@@ -18,6 +18,7 @@
           :trip="trip"
           :item="item"
           :highlighted="item.id === highlightItemId"
+          @select="emit('select', $event)"
           @edit="emit('edit', $event)"
           @delete="emit('delete', $event)"
           @notify="emit('notify', $event)"
@@ -38,6 +39,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  select: [item: ItineraryItem]
   edit: [item: ItineraryItem]
   delete: [item: ItineraryItem]
   notify: [item: ItineraryItem]

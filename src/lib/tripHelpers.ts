@@ -68,9 +68,21 @@ export function tripStatus(trip: Trip, now: Date = new Date()): TripStatus {
   return 'ongoing'
 }
 
+export function eventTaskProgress(item: ItineraryItem): { done: number; total: number } {
+  const total = item.tasks.length
+  const done = item.tasks.filter((t) => t.done).length
+  return { done, total }
+}
+
+/** Trip-wide progress across all event sub-tasks (events without tasks ignored). */
 export function taskProgress(trip: Trip): { done: number; total: number } {
-  const total = trip.itinerary.length
-  const done = trip.itinerary.filter((item) => item.done).length
+  let done = 0
+  let total = 0
+  for (const item of trip.itinerary) {
+    const p = eventTaskProgress(item)
+    done += p.done
+    total += p.total
+  }
   return { done, total }
 }
 

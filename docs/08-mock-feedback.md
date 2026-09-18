@@ -14,7 +14,7 @@ Post–Phase 8 UX feedback to implement in the Vue mock. Frontend-only; keep [04
 | Description cap | **Character count** (set a concrete max in UI + validation, e.g. 280) |
 | Badge | **Status-style chip**; show on **board card and trip header** |
 | Tags | **Fixed set** (curated list in code/seed—not freeform) |
-| Tasks vs itinerary | **Tasks as a view** on itinerary entries (checkboxes / task panel over the same entries—not a separate entity) |
+| Tasks vs itinerary | **Itinerary items are events**; **some events have optional sub-tasks** (`tasks[]`) that can be checked off — not the event itself as a task |
 | Auto-notify | **Only on first assign**, or via an **explicit toggle**—not on every assignment edit |
 | PDF | **Client PDF library** (e.g. html2pdf / jsPDF-style) for Download PDF |
 
@@ -22,7 +22,7 @@ Post–Phase 8 UX feedback to implement in the Vue mock. Frontend-only; keep [04
 
 ## Structure (target)
 
-Reorient the mock around a **Kanban / board** mental model on the dashboard, richer trip creation (description-first, dates derived), and a trip page with a **tasks view** of itinerary entries, **collapsible side panels**, assignable **documents**, and tighter notify/PDF flows.
+Reorient the mock around a **Kanban / board** mental model on the dashboard, richer trip creation (description-first, dates derived), and a trip page where **itinerary items are events** (some with checkable **sub-tasks**), **collapsible side panels**, assignable **documents**, and tighter notify/PDF flows.
 
 ---
 
@@ -62,11 +62,12 @@ Reorient the mock around a **Kanban / board** mental model on the dashboard, ric
 
 ## Trip page (manage)
 
-### Tasks panel (view on itinerary)
+### Event panel (itinerary item)
 
-- Add a **chevron** control with a **collapsible task panel**.
-- Tasks are a **view of itinerary entries** with **checkboxes** (done / not done)—same underlying entries as the timeline, not a second data model.
-- Progress tracker (left of itinerary) can read the same done state.
+- Itinerary items are **events**. Click one to open a **right-side sheet**.
+- **Some events** have optional **sub-tasks** (checklist) that can be checked off; others have none.
+- Sheet shows event details, sub-task list (add/toggle/remove), and crew responses.
+- Progress tracker (left of itinerary, later) counts sub-tasks across events that have them.
 
 ### Assignment → notify
 
@@ -113,15 +114,16 @@ Reorient the mock around a **Kanban / board** mental model on the dashboard, ric
 
 ## Suggested implementation order
 
-1. **Data model** — description (char max), optional destination/dates, badge, fixed tags, done flag on itinerary entries, document assignment/pinned, derived date range.
-2. **New Trip panel** — sheet/panel create; character-count description; no destination/dates in form.
+1. **Data model** — description (char max), optional destination/dates, badge, fixed tags, **events with optional `tasks[]` sub-tasks**, document assignment/pinned, derived date range.
+2. **Trip event panel** — clickable itinerary **event** opens a side sheet with **sub-tasks** + crew responses. *(Corrected: not a New Trip create panel.)*
 3. **Dashboard Kanban** — Upcoming / Ongoing / Past; slim cards (badge + tags; drop items/docs counts).
 4. **Trip page chrome** — badge on header; collapsible Travelers + Documents (default closed); traveler actions beside name.
-5. **Tasks view** — chevron panel + checkboxes on itinerary entries; derived dates; left progress tracker.
+5. **Progress / task polish** — left progress tracker from event sub-tasks; derived dates.
 6. **Assignable documents** — pin + assign; default all.
 7. **Notify** — first-assign / toggle auto-notify; manual Notify scoped to assigned/selected only.
 8. **Itinerary polish** — traveler search on assign; hover hints.
 9. **PDF** — client library on curator + traveler (documents top on traveler view).
+10. **New Trip create** — sheet/panel create; character-count description; no destination/dates in form (deferred; keep dialog for now).
 
 ---
 

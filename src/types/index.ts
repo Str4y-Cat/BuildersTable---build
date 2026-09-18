@@ -61,6 +61,12 @@ export interface Traveler {
   shareCode: string
 }
 
+export interface EventTask {
+  id: string
+  title: string
+  done: boolean
+}
+
 export interface ItineraryItem {
   id: string
   date: string // ISO format: "2026-09-16"
@@ -72,8 +78,11 @@ export interface ItineraryItem {
   /** Empty = all travelers on the trip */
   assignedTravelerIds: string[]
   lastUpdatedAt?: string // ISO datetime
-  /** Task-view checkbox (same entry as timeline) */
-  done: boolean
+  /**
+   * Optional sub-tasks for this event. Empty array = no checklist.
+   * The itinerary entry itself is an event, not a task.
+   */
+  tasks: EventTask[]
 }
 
 export interface Document {

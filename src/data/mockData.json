@@ -82,7 +82,7 @@
           "location": "LAX Airport, Terminal 5",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-2",
@@ -93,7 +93,7 @@
           "location": "SLC Airport Ground Transportation",
           "type": "transport",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-3",
@@ -104,7 +104,23 @@
           "location": "Park City",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": [
+            {
+              "id": "item-3-task-1",
+              "title": "Confirm room block under production name",
+              "done": true
+            },
+            {
+              "id": "item-3-task-2",
+              "title": "Distribute room keys to cast/crew",
+              "done": true
+            },
+            {
+              "id": "item-3-task-3",
+              "title": "Post call sheet on lobby board",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-4",
@@ -115,7 +131,23 @@
           "location": "Festival Box Office",
           "type": "call-time",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-4-task-1",
+              "title": "Confirm crew call times via Telegram",
+              "done": false
+            },
+            {
+              "id": "item-4-task-2",
+              "title": "Check radio / walkie batteries",
+              "done": false
+            },
+            {
+              "id": "item-4-task-3",
+              "title": "Brief talent on screening Q&A",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-5",
@@ -131,7 +163,23 @@
             "traveler-4"
           ],
           "lastUpdatedAt": "2026-09-17T15:00:00.000Z",
-          "done": false
+          "tasks": [
+            {
+              "id": "item-5-task-1",
+              "title": "Load DCP / media check",
+              "done": false
+            },
+            {
+              "id": "item-5-task-2",
+              "title": "Seat reserved block for guests",
+              "done": false
+            },
+            {
+              "id": "item-5-task-3",
+              "title": "Photo stills for festival recap",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-6",
@@ -142,7 +190,7 @@
           "location": "Sundance House",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-7",
@@ -153,7 +201,18 @@
           "location": "Main Street Lounge",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-7-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-7-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-8",
@@ -164,7 +223,18 @@
           "location": "Library Theater",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-8-task-1",
+              "title": "Tech rehearsal with venue",
+              "done": false
+            },
+            {
+              "id": "item-8-task-2",
+              "title": "Guest list at door",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-9",
@@ -175,7 +245,7 @@
           "location": "High West Distillery",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-10",
@@ -186,7 +256,18 @@
           "location": "Festival Office",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-10-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-10-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-11",
@@ -197,7 +278,18 @@
           "location": "Prospector Theater",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-11-task-1",
+              "title": "Tech rehearsal with venue",
+              "done": false
+            },
+            {
+              "id": "item-11-task-2",
+              "title": "Guest list at door",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-12",
@@ -208,7 +300,7 @@
           "location": "Basin Recreation Field House",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-13",
@@ -219,7 +311,7 @@
           "location": "TAO Park City",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-14",
@@ -229,7 +321,18 @@
           "location": "Park City Peaks Hotel",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-14-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-14-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-15",
@@ -240,7 +343,7 @@
           "location": "Salt Lake City Airport",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         }
       ],
       "documents": [
@@ -411,7 +514,7 @@
           "location": "JFK Airport, Terminal 1",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-17",
@@ -422,7 +525,18 @@
           "location": "Berlin Mitte",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-17-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-17-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-18",
@@ -433,7 +547,7 @@
           "location": "Alexanderplatz, Berlin",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-19",
@@ -444,7 +558,7 @@
           "location": "Production warehouse - Kreuzberg",
           "type": "transport",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-20",
@@ -455,7 +569,7 @@
           "location": "Restaurant Tim Raue",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-21",
@@ -466,7 +580,18 @@
           "location": "Brandenburg Gate",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-21-task-1",
+              "title": "Send final call sheet",
+              "done": false
+            },
+            {
+              "id": "item-21-task-2",
+              "title": "Confirm transport pickups",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-22",
@@ -477,7 +602,7 @@
           "location": "Hotel Conference Room",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-23",
@@ -488,7 +613,18 @@
           "location": "Studio Babelsberg",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-23-task-1",
+              "title": "Send final call sheet",
+              "done": false
+            },
+            {
+              "id": "item-23-task-2",
+              "title": "Confirm transport pickups",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-24",
@@ -499,7 +635,7 @@
           "location": "Nobelhart & Schmutzig",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-25",
@@ -510,7 +646,7 @@
           "location": "Hotel Conference Room",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-26",
@@ -521,7 +657,18 @@
           "location": "East Side Gallery",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-26-task-1",
+              "title": "Send final call sheet",
+              "done": false
+            },
+            {
+              "id": "item-26-task-2",
+              "title": "Confirm transport pickups",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-27",
@@ -532,7 +679,7 @@
           "location": "Production warehouse - Kreuzberg",
           "type": "transport",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-28",
@@ -543,7 +690,7 @@
           "location": "Cl\u00e4rchens Ballhaus",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-29",
@@ -553,7 +700,18 @@
           "location": "Hotel Adlon Kempinski",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-29-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-29-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-30",
@@ -564,7 +722,7 @@
           "location": "Berlin Brandenburg Airport",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         }
       ],
       "documents": [
@@ -676,7 +834,7 @@
           "location": "LAX Airport, Terminal B",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-32",
@@ -687,7 +845,18 @@
           "location": "Cannes",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-32-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-32-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-33",
@@ -698,7 +867,7 @@
           "location": "Palais des Festivals",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-34",
@@ -709,7 +878,7 @@
           "location": "March\u00e9 du Film - Riviera",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-35",
@@ -720,7 +889,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-35-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-35-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-36",
@@ -731,7 +911,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-36-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-36-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-37",
@@ -742,7 +933,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-37-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-37-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-38",
@@ -753,7 +955,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-38-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-38-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-39",
@@ -764,7 +977,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-39-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-39-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-40",
@@ -775,7 +999,7 @@
           "location": "La Palme d'Or",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-41",
@@ -786,7 +1010,7 @@
           "location": "Palais des Festivals - Salon",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-42",
@@ -797,7 +1021,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-42-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-42-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-43",
@@ -808,7 +1043,18 @@
           "location": "Grand Th\u00e9\u00e2tre Lumi\u00e8re",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-43-task-1",
+              "title": "Tech rehearsal with venue",
+              "done": false
+            },
+            {
+              "id": "item-43-task-2",
+              "title": "Guest list at door",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-44",
@@ -819,7 +1065,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-44-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-44-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-45",
@@ -830,7 +1087,7 @@
           "location": "Port Pierre Canto",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-46",
@@ -841,7 +1098,7 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-47",
@@ -852,7 +1109,18 @@
           "location": "Market Booth",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-47-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-47-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-48",
@@ -863,7 +1131,7 @@
           "location": "March\u00e9 du Film",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-49",
@@ -874,7 +1142,7 @@
           "location": "Palais des Festivals",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-50",
@@ -884,7 +1152,18 @@
           "location": "H\u00f4tel Martinez",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-50-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-50-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-51",
@@ -895,7 +1174,7 @@
           "location": "Nice C\u00f4te d'Azur Airport",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         }
       ],
       "documents": [
@@ -992,7 +1271,7 @@
           "location": "JFK Airport, Terminal 8",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-53",
@@ -1003,7 +1282,18 @@
           "location": "Culver City",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-53-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-53-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-54",
@@ -1014,7 +1304,7 @@
           "location": "Company 3 - Santa Monica",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-55",
@@ -1025,7 +1315,18 @@
           "location": "Digital Domain - Playa Vista",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-55-task-1",
+              "title": "Prep one-pager",
+              "done": false
+            },
+            {
+              "id": "item-55-task-2",
+              "title": "Confirm attendees",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-56",
@@ -1036,7 +1337,7 @@
           "location": "Company 3 - Santa Monica",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-57",
@@ -1047,7 +1348,7 @@
           "location": "Skywalker Sound - Marin County",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-58",
@@ -1058,7 +1359,7 @@
           "location": "Remote Nine - Hollywood",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-59",
@@ -1069,7 +1370,7 @@
           "location": "Gjelina",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-60",
@@ -1080,7 +1381,7 @@
           "location": "Skywalker Sound - Marin County",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-61",
@@ -1091,7 +1392,18 @@
           "location": "ArcLight Hollywood",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": [
+            {
+              "id": "item-61-task-1",
+              "title": "Tech rehearsal with venue",
+              "done": false
+            },
+            {
+              "id": "item-61-task-2",
+              "title": "Guest list at door",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-62",
@@ -1102,7 +1414,7 @@
           "location": "Hotel Conference Room",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         },
         {
           "id": "item-63",
@@ -1113,7 +1425,7 @@
           "location": "LAX Airport",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": false
+          "tasks": []
         }
       ],
       "documents": [
@@ -1217,7 +1529,7 @@
           "location": "Newark Liberty Airport",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-65",
@@ -1228,7 +1540,7 @@
           "location": "Vistek Toronto",
           "type": "transport",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-66",
@@ -1239,7 +1551,18 @@
           "location": "Toronto",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": [
+            {
+              "id": "item-66-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-66-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-67",
@@ -1250,7 +1573,7 @@
           "location": "Hotel Conference Room",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-68",
@@ -1261,7 +1584,7 @@
           "location": "Subject's residence - Yorkville",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-69",
@@ -1272,7 +1595,7 @@
           "location": "Financial District",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-70",
@@ -1283,7 +1606,7 @@
           "location": "Canoe Restaurant",
           "type": "meal",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-71",
@@ -1294,7 +1617,7 @@
           "location": "University of Toronto Campus",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-72",
@@ -1305,7 +1628,7 @@
           "location": "Harbourfront Centre",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-73",
@@ -1316,7 +1639,7 @@
           "location": "Distillery District Studio",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-74",
@@ -1327,7 +1650,7 @@
           "location": "Kensington Market",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-75",
@@ -1338,7 +1661,7 @@
           "location": "CBC Broadcasting Centre",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-76",
@@ -1349,7 +1672,7 @@
           "location": "Various locations",
           "type": "activity",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-77",
@@ -1360,7 +1683,7 @@
           "location": "Vistek Toronto",
           "type": "transport",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         },
         {
           "id": "item-78",
@@ -1370,7 +1693,18 @@
           "location": "The Fairmont Royal York",
           "type": "accommodation",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": [
+            {
+              "id": "item-78-task-1",
+              "title": "Confirm reservations",
+              "done": true
+            },
+            {
+              "id": "item-78-task-2",
+              "title": "Share Wi\u2011Fi / late checkout notes",
+              "done": false
+            }
+          ]
         },
         {
           "id": "item-79",
@@ -1381,7 +1715,7 @@
           "location": "Toronto Pearson Airport",
           "type": "flight",
           "assignedTravelerIds": [],
-          "done": true
+          "tasks": []
         }
       ],
       "documents": [

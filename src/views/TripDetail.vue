@@ -47,6 +47,7 @@
             <ItineraryTimeline
               :trip="trip"
               :highlight-item-id="highlightItemId"
+              @select="openItemPanel"
               @edit="openEdit"
               @delete="askDelete"
               @notify="openNotify"
@@ -94,6 +95,15 @@
           :item="editingItem"
         />
 
+        <ItineraryItemPanel
+          v-model:open="panelOpen"
+          :trip="trip"
+          :item="panelItem"
+          @edit="onPanelEdit"
+          @delete="onPanelDelete"
+          @notify="onPanelNotify"
+        />
+
         <NotificationComposer
           v-model:open="notifyOpen"
           :trip="trip"
@@ -131,6 +141,7 @@ import type { ItineraryItem } from '@/types'
 import TripHeader from '@/components/TripHeader.vue'
 import ItineraryTimeline from '@/components/ItineraryTimeline.vue'
 import ItineraryItemForm from '@/components/ItineraryItemForm.vue'
+import ItineraryItemPanel from '@/components/ItineraryItemPanel.vue'
 import NotificationComposer from '@/components/NotificationComposer.vue'
 import TravelerList from '@/components/TravelerList.vue'
 import DocumentList from '@/components/DocumentList.vue'
@@ -154,6 +165,8 @@ const trip = computed(() => getTrip(tripId.value))
 
 const formOpen = ref(false)
 const editingItem = ref<ItineraryItem | null>(null)
+const panelOpen = ref(false)
+const panelItemId = ref<string | null>(null)
 const deleteTarget = ref<ItineraryItem | null>(null)
 const deleteOpen = ref(false)
 const notifyOpen = ref(false)
@@ -161,6 +174,11 @@ const notifyItem = ref<ItineraryItem | null>(null)
 const mobileSidebarOpen = ref(false)
 const highlightItemId = ref<string | null>(null)
 let highlightTimer: ReturnType<typeof setTimeout> | null = null
+
+const panelItem = computed(() => {
+  if (!trip.value || !panelItemId.value) return null
+  return trip.value.itinerary.find((i) => i.id === panelItemId.value) ?? null
+})
 
 const goDashboard = () => {
   router.push('/dashboard')
@@ -171,6 +189,11 @@ function openCreate() {
   formOpen.value = true
 }
 
+function openItemPanel(item: ItineraryItem) {
+  panelItemId.value = item.id
+  panelOpen.value = true
+}
+
 function openEdit(item: ItineraryItem) {
   editingItem.value = item
   formOpen.value = true
@@ -179,6 +202,21 @@ function openEdit(item: ItineraryItem) {
 function openNotify(item: ItineraryItem) {
   notifyItem.value = item
   notifyOpen.value = true
+}
+
+function onPanelEdit(item: ItineraryItem) {
+  panelOpen.value = false
+  openEdit(item)
+}
+
+function onPanelDelete(item: ItineraryItem) {
+  panelOpen.value = false
+  askDelete(item)
+}
+
+function onPanelNotify(item: ItineraryItem) {
+  panelOpen.value = false
+  openNotify(item)
 }
 
 function onNotifySent(itemId: string) {
@@ -202,7 +240,12 @@ function onDeleteOpenChange(open: boolean) {
 
 function confirmDelete() {
   if (!trip.value || !deleteTarget.value) return
-  removeItineraryItem(trip.value.id, deleteTarget.value.id)
+  const deletedId = deleteTarget.value.id
+  removeItineraryItem(trip.value.id, deletedId)
+  if (panelItemId.value === deletedId) {
+    panelOpen.value = false
+    panelItemId.value = null
+  }
   toast.success('Entry deleted')
   deleteOpen.value = false
   deleteTarget.value = null

@@ -8,6 +8,7 @@ import {
 } from '@/lib/tripHelpers'
 import type {
   Document,
+  EventTask,
   ItineraryItem,
   MockData,
   NotifyChannel,
@@ -115,8 +116,8 @@ export function useTripsStore() {
 
   const addItineraryItem = (
     tripId: string,
-    item: Omit<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'done'> &
-      Partial<Pick<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'done'>>
+    item: Omit<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'tasks'> &
+      Partial<Pick<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'tasks'>>
   ): ItineraryItem => {
     const trip = requireTrip(tripId)
     const next: ItineraryItem = {
@@ -129,7 +130,7 @@ export function useTripsStore() {
       type: item.type,
       assignedTravelerIds: item.assignedTravelerIds ?? [],
       lastUpdatedAt: item.lastUpdatedAt ?? new Date().toISOString(),
-      done: item.done ?? false
+      tasks: item.tasks ?? []
     }
     trip.itinerary = [...trip.itinerary, next]
     trips.value = [...trips.value]
@@ -161,8 +162,53 @@ export function useTripsStore() {
     return updated
   }
 
-  const setItemDone = (tripId: string, itemId: string, done: boolean): ItineraryItem => {
-    return updateItineraryItem(tripId, itemId, { done })
+  const setEventTaskDone = (
+    tripId: string,
+    itemId: string,
+    taskId: string,
+    done: boolean
+  ): EventTask => {
+    const trip = requireTrip(tripId)
+    const item = trip.itinerary.find((i) => i.id === itemId)
+    if (!item) throw new Error(`Itinerary item not found: ${itemId}`)
+    const taskIndex = item.tasks.findIndex((t) => t.id === taskId)
+    if (taskIndex === -1) throw new Error(`Task not found: ${taskId}`)
+    const updatedTask: EventTask = { ...item.tasks[taskIndex], done }
+    const tasks = [
+      ...item.tasks.slice(0, taskIndex),
+      updatedTask,
+      ...item.tasks.slice(taskIndex + 1)
+    ]
+    updateItineraryItem(tripId, itemId, { tasks })
+    return updatedTask
+  }
+
+  const addEventTask = (
+    tripId: string,
+    itemId: string,
+    title: string
+  ): EventTask => {
+    const trip = requireTrip(tripId)
+    const item = trip.itinerary.find((i) => i.id === itemId)
+    if (!item) throw new Error(`Itinerary item not found: ${itemId}`)
+    const trimmed = title.trim()
+    if (!trimmed) throw new Error('Task title is required')
+    const task: EventTask = {
+      id: newId('task'),
+      title: trimmed,
+      done: false
+    }
+    updateItineraryItem(tripId, itemId, { tasks: [...item.tasks, task] })
+    return task
+  }
+
+  const removeEventTask = (tripId: string, itemId: string, taskId: string): void => {
+    const trip = requireTrip(tripId)
+    const item = trip.itinerary.find((i) => i.id === itemId)
+    if (!item) throw new Error(`Itinerary item not found: ${itemId}`)
+    updateItineraryItem(tripId, itemId, {
+      tasks: item.tasks.filter((t) => t.id !== taskId)
+    })
   }
 
   const removeItineraryItem = (tripId: string, itemId: string): void => {
@@ -356,7 +402,9 @@ export function useTripsStore() {
     deleteTrip,
     addItineraryItem,
     updateItineraryItem,
-    setItemDone,
+    setEventTaskDone,
+    addEventTask,
+    removeEventTask,
     removeItineraryItem,
     addTraveler,
     removeTraveler,
