@@ -17,7 +17,16 @@
 
       <h1 class="text-2xl font-bold tracking-tight">{{ trip.name }}</h1>
       <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
-      <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
+      <p class="text-sm text-muted-foreground">
+        {{ dateRange }}
+        <span
+          v-if="datesDerived"
+          class="ml-1.5 text-xs text-muted-foreground/80"
+          title="Date range is calculated from itinerary event dates"
+        >
+          · from events
+        </span>
+      </p>
       <p
         v-if="trip.description"
         class="max-w-2xl text-sm text-muted-foreground"
@@ -28,6 +37,13 @@
       <div class="flex flex-wrap gap-2 pt-1">
         <Badge variant="secondary">{{ trip.travelers.length }} travelers</Badge>
         <Badge variant="secondary">{{ trip.itinerary.length }} events</Badge>
+        <Badge
+          v-if="tasks.total"
+          variant="secondary"
+          :title="`${tasks.done} of ${tasks.total} sub-tasks complete`"
+        >
+          {{ tasks.done }}/{{ tasks.total }} tasks
+        </Badge>
         <Badge variant="outline">{{ pendingCount }} pending</Badge>
       </div>
     </div>
@@ -50,7 +66,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import type { Trip } from '@/types'
-import { displayDateRange, responseRollup } from '@/lib/tripHelpers'
+import { displayDateRange, isDateRangeDerived, responseRollup, taskProgress } from '@/lib/tripHelpers'
 import { tripBadgeClass, tripBadgeLabel, tripTagLabel } from '@/lib/tripLabels'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -70,8 +86,12 @@ const dateRange = computed(() => {
     day: 'numeric',
     year: 'numeric'
   })
-  return `${formatter.format(new Date(startDate))} - ${formatter.format(new Date(endDate))}`
+  return `${formatter.format(new Date(startDate))} – ${formatter.format(new Date(endDate))}`
 })
+
+const datesDerived = computed(() => isDateRangeDerived(props.trip))
+
+const tasks = computed(() => taskProgress(props.trip))
 
 const pendingCount = computed(() =>
   props.trip.itinerary.reduce(

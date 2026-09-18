@@ -32,13 +32,20 @@
           <!-- Itinerary -->
           <section class="space-y-4 lg:col-span-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-baseline gap-2">
+              <div class="flex flex-wrap items-baseline gap-2">
                 <h2 class="text-lg font-semibold">Itinerary</h2>
                 <span class="text-sm text-muted-foreground">
                   {{ trip.itinerary.length }} events
                 </span>
+                <span
+                  v-if="taskSummary.total"
+                  class="text-sm text-muted-foreground"
+                  :title="`${taskSummary.done} of ${taskSummary.total} sub-tasks complete`"
+                >
+                  · {{ taskSummary.done }}/{{ taskSummary.total }} tasks
+                </span>
               </div>
-              <Button size="sm" @click="openCreate">
+              <Button size="sm" title="Add an itinerary event" @click="openCreate">
                 <Plus class="mr-2 h-4 w-4" />
                 Add entry
               </Button>
@@ -109,6 +116,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
+import { taskProgress } from '@/lib/tripHelpers'
 import type { ItineraryItem } from '@/types'
 import TripHeader from '@/components/TripHeader.vue'
 import ItineraryTimeline from '@/components/ItineraryTimeline.vue'
@@ -134,6 +142,9 @@ const { getTrip, removeItineraryItem } = useTripsStore()
 
 const tripId = computed(() => String(route.params.tripId))
 const trip = computed(() => getTrip(tripId.value))
+const taskSummary = computed(() =>
+  trip.value ? taskProgress(trip.value) : { done: 0, total: 0 }
+)
 
 const formOpen = ref(false)
 const editingItem = ref<ItineraryItem | null>(null)

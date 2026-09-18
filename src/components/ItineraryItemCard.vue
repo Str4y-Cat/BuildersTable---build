@@ -3,8 +3,11 @@
     role="button"
     tabindex="0"
     class="space-y-3 px-4 py-4 transition-colors duration-300 outline-none cursor-pointer hover:bg-muted/40 focus-visible:bg-muted/40 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
-    :class="highlighted ? 'bg-muted/50 ring-2 ring-inset ring-primary/20' : ''"
-    :aria-label="`Open event ${item.title}`"
+    :class="[
+      highlighted ? 'bg-muted/50 ring-2 ring-inset ring-primary/20' : '',
+      timeElapsed ? 'opacity-80' : ''
+    ]"
+    :aria-label="timeElapsed ? `Done event ${item.title}` : `Open event ${item.title}`"
     @click="emit('select', item)"
     @keydown.enter.prevent="emit('select', item)"
     @keydown.space.prevent="emit('select', item)"
@@ -15,16 +18,27 @@
           <Badge :class="itemTypeBadgeClass(item.type)">
             {{ itemTypeLabel(item.type) }}
           </Badge>
+          <Badge
+            v-if="timeElapsed"
+            variant="secondary"
+            title="Scheduled time has passed"
+          >
+            Done
+          </Badge>
           <Badge v-if="updated" variant="outline">Updated</Badge>
           <Badge
             v-if="taskProgress.total"
             variant="secondary"
             :title="`${taskProgress.done} of ${taskProgress.total} sub-tasks done`"
+            :class="tasksComplete ? 'ring-1 ring-foreground' : ''"
           >
             {{ taskProgress.done }}/{{ taskProgress.total }}
           </Badge>
         </div>
-        <h3 class="font-medium leading-snug">
+        <h3
+          class="font-medium leading-snug"
+          :class="timeElapsed ? 'text-muted-foreground line-through' : ''"
+        >
           {{ item.title }}
         </h3>
         <p v-if="metaLine" class="text-sm text-muted-foreground">{{ metaLine }}</p>
@@ -35,22 +49,37 @@
 
       <div class="flex shrink-0 items-center gap-1">
         <div class="hidden flex-wrap justify-end gap-2 sm:flex" @click.stop>
-          <Button variant="outline" size="sm" @click="emit('notify', item)">
+          <Button
+            variant="outline"
+            size="sm"
+            title="Notify assigned travelers"
+            @click="emit('notify', item)"
+          >
             Notify
           </Button>
-          <Button variant="outline" size="sm" @click="emit('edit', item)">
+          <Button
+            variant="outline"
+            size="sm"
+            title="Edit this event"
+            @click="emit('edit', item)"
+          >
             Edit
           </Button>
           <Button
             variant="ghost"
             size="sm"
             class="text-destructive hover:text-destructive"
+            title="Delete this event"
             @click="emit('delete', item)"
           >
             Delete
           </Button>
         </div>
-        <ChevronRight class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+        <ChevronRight
+          class="h-4 w-4 text-muted-foreground"
+          aria-hidden="true"
+          title="Open event panel"
+        />
       </div>
     </div>
 
@@ -87,7 +116,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ItineraryItem, Trip } from '@/types'
-import { eventTaskProgress, isRecentlyUpdated } from '@/lib/tripHelpers'
+import { eventTaskProgress, isEventTimeElapsed, areEventTasksComplete, isRecentlyUpdated } from '@/lib/tripHelpers'
 import { itemTypeBadgeClass, itemTypeLabel } from '@/lib/itemTypeStyles'
 import ResponseRollup from '@/components/ResponseRollup.vue'
 import { Badge } from '@/components/ui/badge'
@@ -110,6 +139,8 @@ const emit = defineEmits<{
 
 const updated = computed(() => isRecentlyUpdated(props.item))
 const taskProgress = computed(() => eventTaskProgress(props.item))
+const tasksComplete = computed(() => areEventTasksComplete(props.item))
+const timeElapsed = computed(() => isEventTimeElapsed(props.item))
 
 const assignedTravelers = computed(() => {
   if (!props.item.assignedTravelerIds.length) return []

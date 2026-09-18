@@ -54,6 +54,22 @@ export function displayDateRange(trip: Trip): DerivedDateRange {
   }
 }
 
+/** True when the shown range comes from itinerary event dates. */
+export function isDateRangeDerived(trip: Trip): boolean {
+  return trip.itinerary.some((item) => Boolean(item.date))
+}
+
+export function formatDateRangeLabel(trip: Trip): string {
+  const { startDate, endDate } = displayDateRange(trip)
+  if (!startDate || !endDate) return 'Dates TBD'
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  })
+  return `${formatter.format(new Date(startDate))} – ${formatter.format(new Date(endDate))}`
+}
+
 export function tripStatus(trip: Trip, now: Date = new Date()): TripStatus {
   const { startDate, endDate } = displayDateRange(trip)
   if (!startDate || !endDate) return 'upcoming'
@@ -72,6 +88,32 @@ export function eventTaskProgress(item: ItineraryItem): { done: number; total: n
   const total = item.tasks.length
   const done = item.tasks.filter((t) => t.done).length
   return { done, total }
+}
+
+/** True when the event has sub-tasks and every one is checked off. */
+export function areEventTasksComplete(item: ItineraryItem): boolean {
+  const { done, total } = eventTaskProgress(item)
+  return total > 0 && done === total
+}
+
+/**
+ * Instant this event is considered over: date + time, or end of that calendar day
+ * when no time is set.
+ */
+export function eventEndsAt(item: ItineraryItem): Date {
+  const end = new Date(`${item.date}T00:00:00`)
+  if (item.time && /^\d{1,2}:\d{2}$/.test(item.time)) {
+    const [h, m] = item.time.split(':').map(Number)
+    end.setHours(h ?? 0, m ?? 0, 0, 0)
+    return end
+  }
+  end.setHours(23, 59, 59, 999)
+  return end
+}
+
+/** Event is done in the itinerary once its scheduled time has passed. */
+export function isEventTimeElapsed(item: ItineraryItem, now: Date = new Date()): boolean {
+  return now.getTime() >= eventEndsAt(item).getTime()
 }
 
 /** Trip-wide progress across all event sub-tasks (events without tasks ignored). */
