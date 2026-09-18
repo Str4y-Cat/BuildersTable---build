@@ -141,6 +141,29 @@ export function affectedTravelers(trip: Trip, item: ItineraryItem): Traveler[] {
   return trip.travelers.filter((t) => idSet.has(t.id))
 }
 
+/**
+ * Travelers newly covered by an assignment change.
+ * `previousIds === undefined` means the entry/document is brand new (nobody assigned yet).
+ * Empty `assignedTravelerIds` means all crew.
+ */
+export function newlyAssignedTravelerIds(
+  previousIds: string[] | undefined,
+  nextIds: string[],
+  allTravelerIds: string[]
+): string[] {
+  const nextEffective =
+    nextIds.length === 0 ? allTravelerIds : nextIds
+
+  if (previousIds === undefined) {
+    return [...nextEffective]
+  }
+
+  const prevEffective = new Set(
+    previousIds.length === 0 ? allTravelerIds : previousIds
+  )
+  return nextEffective.filter((id) => !prevEffective.has(id))
+}
+
 /** Empty document assignment = all travelers on the trip. */
 export function documentAssignees(trip: Trip, doc: Document): Traveler[] {
   if (!doc.assignedTravelerIds.length) {

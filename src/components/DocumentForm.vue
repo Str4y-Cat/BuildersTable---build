@@ -67,6 +67,12 @@
           <Label>Assign crew</Label>
           <p class="text-xs text-muted-foreground">
             Leave all unchecked for all travelers (default).
+            <template v-if="trip.autoNotifyOnAssign">
+              First-time assignees are auto-notified.
+            </template>
+            <template v-else>
+              Auto-notify on assign is off for this trip.
+            </template>
           </p>
           <div
             v-if="trip.travelers.length === 0"
@@ -118,6 +124,7 @@
 import { reactive, ref, watch } from 'vue'
 import { toast } from 'vue-sonner'
 import type { Document, Trip } from '@/types'
+import { newlyAssignedTravelerIds } from '@/lib/tripHelpers'
 import { useTripsStore } from '@/stores/trips'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -157,7 +164,7 @@ const emit = defineEmits<{
   'update:open': [value: boolean]
 }>()
 
-const { addDocument, updateDocument } = useTripsStore()
+const { addDocument, updateDocument, notifyDocumentAssignees } = useTripsStore()
 
 const form = reactive({
   name: '',
@@ -209,20 +216,45 @@ function handleSubmit() {
     return
   }
 
+  const nextIds = [...selectedIds.value]
+  const previousIds = props.document
+    ? [...props.document.assignedTravelerIds]
+    : undefined
+  const allIds = props.trip.travelers.map((t) => t.id)
+
   const payload = {
     name,
     url,
     type: form.type,
     pinned: form.pinned,
-    assignedTravelerIds: [...selectedIds.value]
+    assignedTravelerIds: nextIds
   }
 
+  let docId: string
   if (props.document) {
     updateDocument(props.trip.id, props.document.id, payload)
+    docId = props.document.id
     toast.success('Document updated')
   } else {
-    addDocument(props.trip.id, payload)
+    const created = addDocument(props.trip.id, payload)
+    docId = created.id
     toast.success('Document added')
+  }
+
+  if (props.trip.autoNotifyOnAssign) {
+    const firstAssignIds = newlyAssignedTravelerIds(previousIds, nextIds, allIds)
+    if (firstAssignIds.length) {
+      const count = notifyDocumentAssignees(
+        props.trip.id,
+        docId,
+        ['email', 'telegram'],
+        `New document for you: “${name}”.`,
+        firstAssignIds
+      )
+      if (count) {
+        toast.message(`Auto-notified ${count} newly assigned traveler${count === 1 ? '' : 's'}`)
+      }
+    }
   }
 
   emit('update:open', false)

@@ -61,6 +61,12 @@
           <Label>Assign travelers</Label>
           <p class="text-xs text-muted-foreground">
             Leave all unchecked for all travelers.
+            <template v-if="trip.autoNotifyOnAssign">
+              First-time assignees are auto-notified.
+            </template>
+            <template v-else>
+              Auto-notify on assign is off for this trip.
+            </template>
           </p>
           <div
             v-if="trip.travelers.length === 0"
@@ -72,15 +78,24 @@
             <label
               v-for="traveler in trip.travelers"
               :key="traveler.id"
-              class="flex cursor-pointer items-center gap-2 text-sm"
+              class="flex cursor-pointer items-start gap-2 text-sm"
             >
               <Checkbox
+                class="mt-0.5"
                 :model-value="selectedIds.includes(traveler.id)"
                 @update:model-value="(v) => toggleTraveler(traveler.id, v === true)"
               />
-              <span>
-                {{ traveler.name }}
-                <span class="text-muted-foreground">· {{ traveler.roleOnProduction }}</span>
+              <span class="min-w-0">
+                <span class="font-medium">{{ traveler.name }}</span>
+                <span class="text-muted-foreground">
+                  · {{ traveler.roleOnProduction }}
+                </span>
+                <span
+                  v-if="traveler.phone"
+                  class="mt-0.5 block text-xs text-muted-foreground"
+                >
+                  Tel. {{ traveler.phone }}
+                </span>
               </span>
             </label>
           </div>
@@ -103,6 +118,7 @@
 import { reactive, ref, watch } from 'vue'
 import { toast } from 'vue-sonner'
 import type { ItineraryItem, ItineraryItemType, Trip } from '@/types'
+import { newlyAssignedTravelerIds } from '@/lib/tripHelpers'
 import { useTripsStore } from '@/stores/trips'
 import { ITINERARY_ITEM_TYPES, itemTypeLabel } from '@/lib/itemTypeStyles'
 import { Button } from '@/components/ui/button'
@@ -136,7 +152,7 @@ const emit = defineEmits<{
   'update:open': [value: boolean]
 }>()
 
-const { addItineraryItem, updateItineraryItem } = useTripsStore()
+const { addItineraryItem, updateItineraryItem, notifyAffected } = useTripsStore()
 
 const form = reactive({
   date: '',
@@ -194,6 +210,10 @@ function handleSubmit() {
     return
   }
 
+  const nextIds = [...selectedIds.value]
+  const previousIds = props.item ? [...props.item.assignedTravelerIds] : undefined
+  const allIds = props.trip.travelers.map((t) => t.id)
+
   const payload = {
     date,
     time: form.time || undefined,
@@ -201,15 +221,34 @@ function handleSubmit() {
     type: form.type,
     location: form.location.trim() || undefined,
     description: form.description.trim() || undefined,
-    assignedTravelerIds: [...selectedIds.value]
+    assignedTravelerIds: nextIds
   }
 
+  let itemId: string
   if (props.item) {
     updateItineraryItem(props.trip.id, props.item.id, payload)
+    itemId = props.item.id
     toast.success('Entry updated')
   } else {
-    addItineraryItem(props.trip.id, payload)
+    const created = addItineraryItem(props.trip.id, payload)
+    itemId = created.id
     toast.success('Entry added')
+  }
+
+  if (props.trip.autoNotifyOnAssign) {
+    const firstAssignIds = newlyAssignedTravelerIds(previousIds, nextIds, allIds)
+    if (firstAssignIds.length) {
+      const count = notifyAffected(
+        props.trip.id,
+        itemId,
+        ['email', 'telegram'],
+        `You’ve been assigned to “${title}” on ${date}${form.time ? ` at ${form.time}` : ''}. Please confirm.`,
+        firstAssignIds
+      )
+      if (count) {
+        toast.message(`Auto-notified ${count} newly assigned traveler${count === 1 ? '' : 's'}`)
+      }
+    }
   }
 
   emit('update:open', false)

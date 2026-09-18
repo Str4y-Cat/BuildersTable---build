@@ -315,21 +315,29 @@ export function useTripsStore() {
     tripId: string,
     itemId: string,
     channels: NotifyChannel[],
-    message: string
-  ): void => {
+    message: string,
+    /** When set, only these travelers (must be in the item’s assigned set). */
+    travelerIds?: string[]
+  ): number => {
     const trip = requireTrip(tripId)
     const item = trip.itinerary.find((i) => i.id === itemId)
     if (!item) {
       throw new Error(`Itinerary item not found: ${itemId}`)
     }
-    if (!channels.length) return
+    if (!channels.length) return 0
 
     const now = new Date().toISOString()
-    const affected = affectedTravelers(trip, item)
+    let recipients = affectedTravelers(trip, item)
+    if (travelerIds?.length) {
+      const allow = new Set(travelerIds)
+      recipients = recipients.filter((t) => allow.has(t.id))
+    }
+    if (!recipients.length) return 0
+
     const logs = trip.notificationLogs ? [...trip.notificationLogs] : []
     const nextResponses = [...trip.responses]
 
-    for (const traveler of affected) {
+    for (const traveler of recipients) {
       for (const channel of channels) {
         logs.push({
           id: newId('notif'),
@@ -363,6 +371,54 @@ export function useTripsStore() {
       item.lastUpdatedAt = now
     }
     trips.value = [...trips.value]
+    return recipients.length
+  }
+
+  /** Simulated notify for document assignees (no itinerary response rows). */
+  const notifyDocumentAssignees = (
+    tripId: string,
+    docId: string,
+    channels: NotifyChannel[],
+    message: string,
+    travelerIds?: string[]
+  ): number => {
+    const trip = requireTrip(tripId)
+    const doc = trip.documents.find((d) => d.id === docId)
+    if (!doc) {
+      throw new Error(`Document not found: ${docId}`)
+    }
+    if (!channels.length) return 0
+
+    let recipients =
+      doc.assignedTravelerIds.length === 0
+        ? trip.travelers
+        : trip.travelers.filter((t) => doc.assignedTravelerIds.includes(t.id))
+
+    if (travelerIds?.length) {
+      const allow = new Set(travelerIds)
+      recipients = recipients.filter((t) => allow.has(t.id))
+    }
+    if (!recipients.length) return 0
+
+    const now = new Date().toISOString()
+    const logs = trip.notificationLogs ? [...trip.notificationLogs] : []
+    // Reuse log shape with itineraryItemId = doc id prefix for mock traceability
+    for (const traveler of recipients) {
+      for (const channel of channels) {
+        logs.push({
+          id: newId('notif'),
+          tripId,
+          itineraryItemId: `doc:${docId}`,
+          travelerId: traveler.id,
+          channel,
+          sentAt: now,
+          messagePreview: message.slice(0, 160)
+        })
+      }
+    }
+    trip.notificationLogs = logs
+    trips.value = [...trips.value]
+    return recipients.length
   }
 
   const respondToItem = (
@@ -412,6 +468,7 @@ export function useTripsStore() {
     updateDocument,
     removeDocument,
     notifyAffected,
+    notifyDocumentAssignees,
     respondToItem
   }
 }

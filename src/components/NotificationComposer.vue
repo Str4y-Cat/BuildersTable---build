@@ -2,31 +2,62 @@
   <Dialog :open="open" @update:open="emit('update:open', $event)">
     <DialogContent class="sm:max-w-lg">
       <DialogHeader>
-        <DialogTitle>Notify affected travelers</DialogTitle>
+        <DialogTitle>Notify assigned travelers</DialogTitle>
         <DialogDescription>
           <template v-if="item">
-            Simulated send for “{{ item.title }}”. No real email or Telegram is sent.
+            Simulated send for “{{ item.title }}”. Only currently assigned crew
+            (or your selection) are notified — not the whole trip by default.
           </template>
         </DialogDescription>
       </DialogHeader>
 
       <div v-if="item" class="space-y-4">
         <div class="space-y-2">
-          <p class="text-sm font-medium">Affected travelers</p>
+          <div class="flex items-center justify-between gap-2">
+            <p class="text-sm font-medium">Recipients</p>
+            <button
+              v-if="assigned.length"
+              type="button"
+              class="text-xs text-muted-foreground underline-offset-2 hover:underline"
+              @click="toggleAllSelected"
+            >
+              {{ allSelected ? 'Clear' : 'Select all assigned' }}
+            </button>
+          </div>
+          <p class="text-xs text-muted-foreground">
+            Assigned to this event
+            <template v-if="item.assignedTravelerIds.length === 0"> (all crew)</template>.
+          </p>
           <div
-            v-if="affected.length === 0"
+            v-if="assigned.length === 0"
             class="rounded-md border border-dashed p-3 text-sm text-muted-foreground"
           >
             No travelers on this trip to notify.
           </div>
-          <div v-else class="flex flex-wrap gap-1.5">
-            <Badge
-              v-for="traveler in affected"
+          <div v-else class="max-h-40 space-y-2 overflow-y-auto rounded-md border p-3">
+            <label
+              v-for="traveler in assigned"
               :key="traveler.id"
-              variant="secondary"
+              class="flex cursor-pointer items-start gap-2 text-sm"
             >
-              {{ traveler.name }}
-            </Badge>
+              <Checkbox
+                class="mt-0.5"
+                :model-value="selectedIds.includes(traveler.id)"
+                @update:model-value="(v) => toggleRecipient(traveler.id, v === true)"
+              />
+              <span class="min-w-0">
+                <span class="font-medium">{{ traveler.name }}</span>
+                <span class="text-muted-foreground">
+                  · {{ traveler.roleOnProduction }}
+                </span>
+                <span
+                  v-if="traveler.phone"
+                  class="mt-0.5 block text-xs text-muted-foreground"
+                >
+                  Tel. {{ traveler.phone }}
+                </span>
+              </span>
+            </label>
           </div>
         </div>
 
@@ -74,7 +105,6 @@ import { toast } from 'vue-sonner'
 import type { ItineraryItem, NotifyChannel, Trip } from '@/types'
 import { affectedTravelers } from '@/lib/tripHelpers'
 import { useTripsStore } from '@/stores/trips'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -104,9 +134,16 @@ const { notifyAffected } = useTripsStore()
 const emailChannel = ref(true)
 const telegramChannel = ref(true)
 const message = ref('')
+const selectedIds = ref<string[]>([])
 
-const affected = computed(() =>
+const assigned = computed(() =>
   props.item ? affectedTravelers(props.trip, props.item) : []
+)
+
+const allSelected = computed(
+  () =>
+    assigned.value.length > 0 &&
+    assigned.value.every((t) => selectedIds.value.includes(t.id))
 )
 
 const selectedChannels = computed((): NotifyChannel[] => {
@@ -119,7 +156,7 @@ const selectedChannels = computed((): NotifyChannel[] => {
 const canSend = computed(
   () =>
     !!props.item &&
-    affected.value.length > 0 &&
+    selectedIds.value.length > 0 &&
     selectedChannels.value.length > 0 &&
     message.value.trim().length > 0
 )
@@ -135,22 +172,42 @@ watch(
     emailChannel.value = true
     telegramChannel.value = true
     message.value = defaultMessage(props.item)
+    selectedIds.value = affectedTravelers(props.trip, props.item).map((t) => t.id)
   }
 )
+
+function toggleRecipient(id: string, checked: boolean) {
+  if (checked) {
+    if (!selectedIds.value.includes(id)) {
+      selectedIds.value = [...selectedIds.value, id]
+    }
+  } else {
+    selectedIds.value = selectedIds.value.filter((x) => x !== id)
+  }
+}
+
+function toggleAllSelected() {
+  if (allSelected.value) {
+    selectedIds.value = []
+  } else {
+    selectedIds.value = assigned.value.map((t) => t.id)
+  }
+}
 
 function send() {
   if (!props.item || !canSend.value) {
     if (!selectedChannels.value.length) toast.error('Select at least one channel')
+    else if (!selectedIds.value.length) toast.error('Select at least one recipient')
     else if (!message.value.trim()) toast.error('Message is required')
     return
   }
 
-  const count = affected.value.length
-  notifyAffected(
+  const count = notifyAffected(
     props.trip.id,
     props.item.id,
     selectedChannels.value,
-    message.value.trim()
+    message.value.trim(),
+    selectedIds.value
   )
   toast.success(`Notified ${count} traveler${count === 1 ? '' : 's'}`)
   emit('sent', props.item.id)
