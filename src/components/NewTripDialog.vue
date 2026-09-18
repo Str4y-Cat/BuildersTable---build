@@ -14,23 +14,16 @@
           <Input id="new-trip-name" v-model="form.name" required placeholder="Milan → Paris shoot" />
         </div>
         <div class="space-y-2">
-          <Label for="new-trip-destination">Destination</Label>
+          <Label for="new-trip-description">Description</Label>
           <Input
-            id="new-trip-destination"
-            v-model="form.destination"
-            required
-            placeholder="Milan, Italy"
+            id="new-trip-description"
+            v-model="form.description"
+            :maxlength="TRIP_DESCRIPTION_MAX"
+            placeholder="Short trip brief"
           />
-        </div>
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div class="space-y-2">
-            <Label for="new-trip-start">Start date</Label>
-            <Input id="new-trip-start" v-model="form.startDate" type="date" required />
-          </div>
-          <div class="space-y-2">
-            <Label for="new-trip-end">End date</Label>
-            <Input id="new-trip-end" v-model="form.endDate" type="date" required />
-          </div>
+          <p class="text-xs text-muted-foreground">
+            {{ form.description.length }}/{{ TRIP_DESCRIPTION_MAX }}
+          </p>
         </div>
 
         <DialogFooter>
@@ -49,6 +42,7 @@ import { reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
+import { TRIP_DESCRIPTION_MAX } from '@/types'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -74,16 +68,12 @@ const { createTrip } = useTripsStore()
 
 const form = reactive({
   name: '',
-  destination: '',
-  startDate: '',
-  endDate: ''
+  description: ''
 })
 
 function resetForm() {
   form.name = ''
-  form.destination = ''
-  form.startDate = ''
-  form.endDate = ''
+  form.description = ''
 }
 
 watch(
@@ -95,21 +85,14 @@ watch(
 
 function handleSubmit() {
   const name = form.name.trim()
-  const destination = form.destination.trim()
-  if (!name || !destination || !form.startDate || !form.endDate) {
-    toast.error('All fields are required')
-    return
-  }
-  if (form.endDate < form.startDate) {
-    toast.error('End date must be on or after start date')
+  if (!name) {
+    toast.error('Name is required')
     return
   }
 
   const trip = createTrip({
     name,
-    destination,
-    startDate: form.startDate,
-    endDate: form.endDate
+    description: form.description.trim()
   })
   toast.success('Trip created')
   emit('update:open', false)

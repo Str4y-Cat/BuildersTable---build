@@ -159,7 +159,7 @@ function resetForm() {
     form.description = props.item.description ?? ''
     selectedIds.value = [...props.item.assignedTravelerIds]
   } else {
-    form.date = props.trip.startDate
+    form.date = props.trip.startDate ?? props.trip.itinerary[0]?.date ?? ''
     form.time = ''
     form.title = ''
     form.type = 'activity'

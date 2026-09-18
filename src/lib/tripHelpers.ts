@@ -1,4 +1,6 @@
 import type {
+  DerivedDateRange,
+  Document,
   EntryResponse,
   ItineraryItem,
   ResponseRollup,
@@ -7,6 +9,7 @@ import type {
   Trip,
   TripStatus
 } from '@/types'
+import { TRIP_DESCRIPTION_MAX } from '@/types'
 
 const RECENT_MS = 72 * 60 * 60 * 1000
 
@@ -25,16 +28,54 @@ export function isRecentlyUpdated(
   return travelerResponse?.status === 'pending'
 }
 
+/** Min/max itinerary dates, falling back to explicit trip overrides. */
+export function derivedDateRange(trip: Trip): DerivedDateRange {
+  const dates = trip.itinerary
+    .map((item) => item.date)
+    .filter((d): d is string => Boolean(d))
+    .sort()
+
+  if (dates.length) {
+    return { startDate: dates[0]!, endDate: dates[dates.length - 1]! }
+  }
+
+  return {
+    startDate: trip.startDate ?? null,
+    endDate: trip.endDate ?? null
+  }
+}
+
+/** Display range preferring derived itinerary dates. */
+export function displayDateRange(trip: Trip): DerivedDateRange {
+  const derived = derivedDateRange(trip)
+  return {
+    startDate: derived.startDate ?? trip.startDate ?? null,
+    endDate: derived.endDate ?? trip.endDate ?? null
+  }
+}
+
 export function tripStatus(trip: Trip, now: Date = new Date()): TripStatus {
-  const start = new Date(trip.startDate)
-  const end = new Date(trip.endDate)
-  // Compare by calendar day end (inclusive end date)
+  const { startDate, endDate } = displayDateRange(trip)
+  if (!startDate || !endDate) return 'upcoming'
+
+  const start = new Date(startDate)
+  const end = new Date(endDate)
   const endOfDay = new Date(end)
   endOfDay.setHours(23, 59, 59, 999)
 
   if (now < start) return 'upcoming'
   if (now > endOfDay) return 'past'
   return 'ongoing'
+}
+
+export function taskProgress(trip: Trip): { done: number; total: number } {
+  const total = trip.itinerary.length
+  const done = trip.itinerary.filter((item) => item.done).length
+  return { done, total }
+}
+
+export function clampTripDescription(value: string): string {
+  return value.slice(0, TRIP_DESCRIPTION_MAX)
 }
 
 /** Empty assignment = all travelers on the trip. */
@@ -44,6 +85,23 @@ export function affectedTravelers(trip: Trip, item: ItineraryItem): Traveler[] {
   }
   const idSet = new Set(item.assignedTravelerIds)
   return trip.travelers.filter((t) => idSet.has(t.id))
+}
+
+/** Empty document assignment = all travelers on the trip. */
+export function documentAssignees(trip: Trip, doc: Document): Traveler[] {
+  if (!doc.assignedTravelerIds.length) {
+    return trip.travelers
+  }
+  const idSet = new Set(doc.assignedTravelerIds)
+  return trip.travelers.filter((t) => idSet.has(t.id))
+}
+
+export function documentsForTraveler(trip: Trip, travelerId: string): Document[] {
+  return trip.documents.filter(
+    (doc) =>
+      doc.assignedTravelerIds.length === 0 ||
+      doc.assignedTravelerIds.includes(travelerId)
+  )
 }
 
 export function entriesForTraveler(trip: Trip, travelerId: string): ItineraryItem[] {

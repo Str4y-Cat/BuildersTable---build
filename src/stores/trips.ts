@@ -2,16 +2,20 @@ import { computed, readonly, ref } from 'vue'
 import mockDataJson from '@/data/mockData.json'
 import {
   affectedTravelers,
+  clampTripDescription,
   generateShareCode,
   newId
 } from '@/lib/tripHelpers'
 import type {
+  Document,
   ItineraryItem,
   MockData,
   NotifyChannel,
   ResponseStatus,
   Traveler,
   Trip,
+  TripBadge,
+  TripTag,
   User
 } from '@/types'
 
@@ -31,6 +35,32 @@ function requireTrip(tripId: string): Trip {
   return trip
 }
 
+export type CreateTripInput = {
+  name: string
+  description?: string
+  badge?: TripBadge
+  tags?: TripTag[]
+  autoNotifyOnAssign?: boolean
+  /** Optional overrides — prefer derived itinerary dates when absent */
+  destination?: string
+  startDate?: string
+  endDate?: string
+}
+
+export type UpdateTripPatch = Partial<
+  Pick<
+    Trip,
+    | 'name'
+    | 'destination'
+    | 'startDate'
+    | 'endDate'
+    | 'description'
+    | 'badge'
+    | 'tags'
+    | 'autoNotifyOnAssign'
+  >
+>
+
 export function useTripsStore() {
   const getTrip = (tripId: string): Trip | undefined =>
     trips.value.find((t) => t.id === tripId)
@@ -47,18 +77,17 @@ export function useTripsStore() {
     return undefined
   }
 
-  const createTrip = (input: {
-    name: string
-    destination: string
-    startDate: string
-    endDate: string
-  }): Trip => {
+  const createTrip = (input: CreateTripInput): Trip => {
     const trip: Trip = {
       id: newId('trip'),
       name: input.name,
       destination: input.destination,
       startDate: input.startDate,
       endDate: input.endDate,
+      description: clampTripDescription(input.description?.trim() ?? ''),
+      badge: input.badge ?? 'planning',
+      tags: input.tags ?? [],
+      autoNotifyOnAssign: input.autoNotifyOnAssign ?? true,
       travelers: [],
       itinerary: [],
       documents: [],
@@ -69,12 +98,13 @@ export function useTripsStore() {
     return trip
   }
 
-  const updateTrip = (
-    tripId: string,
-    patch: Partial<Pick<Trip, 'name' | 'destination' | 'startDate' | 'endDate'>>
-  ): Trip => {
+  const updateTrip = (tripId: string, patch: UpdateTripPatch): Trip => {
     const trip = requireTrip(tripId)
-    Object.assign(trip, patch)
+    const next = { ...patch }
+    if (typeof next.description === 'string') {
+      next.description = clampTripDescription(next.description)
+    }
+    Object.assign(trip, next)
     trips.value = [...trips.value]
     return trip
   }
@@ -85,8 +115,8 @@ export function useTripsStore() {
 
   const addItineraryItem = (
     tripId: string,
-    item: Omit<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt'> &
-      Partial<Pick<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt'>>
+    item: Omit<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'done'> &
+      Partial<Pick<ItineraryItem, 'id' | 'assignedTravelerIds' | 'lastUpdatedAt' | 'done'>>
   ): ItineraryItem => {
     const trip = requireTrip(tripId)
     const next: ItineraryItem = {
@@ -98,7 +128,8 @@ export function useTripsStore() {
       location: item.location,
       type: item.type,
       assignedTravelerIds: item.assignedTravelerIds ?? [],
-      lastUpdatedAt: item.lastUpdatedAt ?? new Date().toISOString()
+      lastUpdatedAt: item.lastUpdatedAt ?? new Date().toISOString(),
+      done: item.done ?? false
     }
     trip.itinerary = [...trip.itinerary, next]
     trips.value = [...trips.value]
@@ -128,6 +159,10 @@ export function useTripsStore() {
     ]
     trips.value = [...trips.value]
     return updated
+  }
+
+  const setItemDone = (tripId: string, itemId: string, done: boolean): ItineraryItem => {
+    return updateItineraryItem(tripId, itemId, { done })
   }
 
   const removeItineraryItem = (tripId: string, itemId: string): void => {
@@ -168,12 +203,65 @@ export function useTripsStore() {
       ...item,
       assignedTravelerIds: item.assignedTravelerIds.filter((id) => id !== travelerId)
     }))
+    trip.documents = trip.documents.map((doc) => ({
+      ...doc,
+      assignedTravelerIds: doc.assignedTravelerIds.filter((id) => id !== travelerId)
+    }))
     trip.responses = trip.responses.filter((r) => r.travelerId !== travelerId)
     if (trip.notificationLogs) {
       trip.notificationLogs = trip.notificationLogs.filter(
         (n) => n.travelerId !== travelerId
       )
     }
+    trips.value = [...trips.value]
+  }
+
+  const addDocument = (
+    tripId: string,
+    doc: Omit<Document, 'id' | 'assignedTravelerIds' | 'pinned'> &
+      Partial<Pick<Document, 'id' | 'assignedTravelerIds' | 'pinned'>>
+  ): Document => {
+    const trip = requireTrip(tripId)
+    const next: Document = {
+      id: doc.id ?? newId('doc'),
+      name: doc.name,
+      url: doc.url,
+      type: doc.type,
+      assignedTravelerIds: doc.assignedTravelerIds ?? [],
+      pinned: doc.pinned ?? false
+    }
+    trip.documents = [...trip.documents, next]
+    trips.value = [...trips.value]
+    return next
+  }
+
+  const updateDocument = (
+    tripId: string,
+    docId: string,
+    patch: Partial<Omit<Document, 'id'>>
+  ): Document => {
+    const trip = requireTrip(tripId)
+    const index = trip.documents.findIndex((d) => d.id === docId)
+    if (index === -1) {
+      throw new Error(`Document not found: ${docId}`)
+    }
+    const updated: Document = {
+      ...trip.documents[index],
+      ...patch,
+      id: docId
+    }
+    trip.documents = [
+      ...trip.documents.slice(0, index),
+      updated,
+      ...trip.documents.slice(index + 1)
+    ]
+    trips.value = [...trips.value]
+    return updated
+  }
+
+  const removeDocument = (tripId: string, docId: string): void => {
+    const trip = requireTrip(tripId)
+    trip.documents = trip.documents.filter((d) => d.id !== docId)
     trips.value = [...trips.value]
   }
 
@@ -268,9 +356,13 @@ export function useTripsStore() {
     deleteTrip,
     addItineraryItem,
     updateItineraryItem,
+    setItemDone,
     removeItineraryItem,
     addTraveler,
     removeTraveler,
+    addDocument,
+    updateDocument,
+    removeDocument,
     notifyAffected,
     respondToItem
   }

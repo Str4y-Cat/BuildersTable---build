@@ -125,7 +125,8 @@ const filteredTrips = computed(() => {
     if (!q) return true
     return (
       trip.name.toLowerCase().includes(q) ||
-      trip.destination.toLowerCase().includes(q)
+      (trip.destination?.toLowerCase().includes(q) ?? false) ||
+      trip.description.toLowerCase().includes(q)
     )
   })
 })

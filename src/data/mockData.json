@@ -81,7 +81,8 @@
           "description": "Delta DL1234, arrives 13:45 local time",
           "location": "LAX Airport, Terminal 5",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-2",
@@ -91,7 +92,8 @@
           "description": "Private shuttle from Salt Lake City Airport",
           "location": "SLC Airport Ground Transportation",
           "type": "transport",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-3",
@@ -101,7 +103,8 @@
           "description": "Park City Peaks Hotel, 2121 Park Avenue",
           "location": "Park City",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-4",
@@ -111,7 +114,8 @@
           "description": "Collect festival passes and welcome materials",
           "location": "Festival Box Office",
           "type": "call-time",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-5",
@@ -126,7 +130,8 @@
             "traveler-2",
             "traveler-4"
           ],
-          "lastUpdatedAt": "2026-09-17T15:00:00.000Z"
+          "lastUpdatedAt": "2026-09-17T15:00:00.000Z",
+          "done": false
         },
         {
           "id": "item-6",
@@ -136,7 +141,8 @@
           "description": "Panel discussion with industry leaders",
           "location": "Sundance House",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-7",
@@ -146,7 +152,8 @@
           "description": "Meeting with A24 acquisition team",
           "location": "Main Street Lounge",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-8",
@@ -156,7 +163,8 @@
           "description": "Competition film screening",
           "location": "Library Theater",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-9",
@@ -166,7 +174,8 @@
           "description": "Industry networking event",
           "location": "High West Distillery",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-10",
@@ -176,7 +185,8 @@
           "description": "Back-to-back meetings with emerging filmmakers",
           "location": "Festival Office",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-11",
@@ -186,7 +196,8 @@
           "description": "Curated short film program",
           "location": "Prospector Theater",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-12",
@@ -196,7 +207,8 @@
           "description": "Sundance Film Festival Awards",
           "location": "Basin Recreation Field House",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-13",
@@ -206,7 +218,8 @@
           "description": "Festival closing celebration",
           "location": "TAO Park City",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-14",
@@ -215,7 +228,8 @@
           "title": "Hotel Check-out",
           "location": "Park City Peaks Hotel",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-15",
@@ -225,7 +239,8 @@
           "description": "Delta DL5678, departs 14:00",
           "location": "Salt Lake City Airport",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         }
       ],
       "documents": [
@@ -233,25 +248,33 @@
           "id": "doc-1",
           "name": "Festival Schedule & Passes.pdf",
           "url": "https://drive.google.com/file/d/placeholder-sundance-schedule",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": true
         },
         {
           "id": "doc-2",
           "name": "Hotel Confirmations",
           "url": "https://drive.google.com/file/d/placeholder-hotel-conf",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-3",
           "name": "Flight Itineraries",
           "url": "https://drive.google.com/file/d/placeholder-flights",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-4",
           "name": "Meeting Schedule & Contacts",
           "url": "https://docs.google.com/spreadsheets/d/placeholder-meetings",
-          "type": "spreadsheet"
+          "type": "spreadsheet",
+          "assignedTravelerIds": [],
+          "pinned": false
         }
       ],
       "responses": [
@@ -273,7 +296,14 @@
           "status": "pending"
         }
       ],
-      "notificationLogs": []
+      "notificationLogs": [],
+      "description": "Sundance 2026 crew travel and call times for the Framelight premiere week.",
+      "badge": "locked",
+      "tags": [
+        "festival",
+        "multi-city"
+      ],
+      "autoNotifyOnAssign": true
     },
     {
       "id": "trip-2",
@@ -380,7 +410,8 @@
           "description": "Lufthansa LH405, arrives 20:45 local time",
           "location": "JFK Airport, Terminal 1",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-17",
@@ -390,7 +421,8 @@
           "description": "Hotel Adlon Kempinski, Unter den Linden 77",
           "location": "Berlin Mitte",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-18",
@@ -400,7 +432,8 @@
           "description": "Scout commercial shoot locations with director and DP",
           "location": "Alexanderplatz, Berlin",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-19",
@@ -410,7 +443,8 @@
           "description": "Camera package and lighting equipment delivery",
           "location": "Production warehouse - Kreuzberg",
           "type": "transport",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-20",
@@ -420,7 +454,8 @@
           "description": "Welcome dinner with full crew",
           "location": "Restaurant Tim Raue",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-21",
@@ -430,7 +465,8 @@
           "description": "Commercial shoot at Brandenburg Gate (exterior scenes)",
           "location": "Brandenburg Gate",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-22",
@@ -440,7 +476,8 @@
           "description": "Review Day 1 footage with director and client",
           "location": "Hotel Conference Room",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-23",
@@ -450,7 +487,8 @@
           "description": "Interior scenes at studio",
           "location": "Studio Babelsberg",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-24",
@@ -460,7 +498,8 @@
           "description": "Lunch with client stakeholders - mid-shoot check-in",
           "location": "Nobelhart & Schmutzig",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-25",
@@ -470,7 +509,8 @@
           "description": "Review Day 2 footage",
           "location": "Hotel Conference Room",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-26",
@@ -480,7 +520,8 @@
           "description": "Final shots and pickups",
           "location": "East Side Gallery",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-27",
@@ -490,7 +531,8 @@
           "description": "Pack and return all equipment",
           "location": "Production warehouse - Kreuzberg",
           "type": "transport",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-28",
@@ -500,7 +542,8 @@
           "description": "Crew celebration dinner",
           "location": "Cl\u00e4rchens Ballhaus",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-29",
@@ -509,7 +552,8 @@
           "title": "Hotel Check-out",
           "location": "Hotel Adlon Kempinski",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-30",
@@ -519,7 +563,8 @@
           "description": "Lufthansa LH406, departs 14:30",
           "location": "Berlin Brandenburg Airport",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         }
       ],
       "documents": [
@@ -527,35 +572,51 @@
           "id": "doc-5",
           "name": "Berlin Shoot Schedule.pdf",
           "url": "https://drive.google.com/file/d/placeholder-shoot-schedule",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": true
         },
         {
           "id": "doc-6",
           "name": "Location Permits",
           "url": "https://drive.google.com/file/d/placeholder-permits",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-7",
           "name": "Equipment List",
           "url": "https://docs.google.com/spreadsheets/d/placeholder-equipment",
-          "type": "spreadsheet"
+          "type": "spreadsheet",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-8",
           "name": "Day 1 Call Sheet",
           "url": "https://drive.google.com/file/d/placeholder-callsheet-1",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-9",
           "name": "Day 2 Call Sheet",
           "url": "https://drive.google.com/file/d/placeholder-callsheet-2",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         }
       ],
       "responses": [],
-      "notificationLogs": []
+      "notificationLogs": [],
+      "description": "Berlin commercial shoot \u2014 ground transport, call times, and hotel block.",
+      "badge": "planning",
+      "tags": [
+        "commercial"
+      ],
+      "autoNotifyOnAssign": true
     },
     {
       "id": "trip-3",
@@ -614,7 +675,8 @@
           "description": "Air France AF3752, arrives 05:45+1 local time",
           "location": "LAX Airport, Terminal B",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-32",
@@ -624,7 +686,8 @@
           "description": "H\u00f4tel Martinez, 73 Boulevard de la Croisette",
           "location": "Cannes",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-33",
@@ -634,7 +697,8 @@
           "description": "Collect March\u00e9 du Film passes and materials",
           "location": "Palais des Festivals",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-34",
@@ -644,7 +708,8 @@
           "description": "Set up company booth at film market",
           "location": "March\u00e9 du Film - Riviera",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-35",
@@ -654,7 +719,8 @@
           "description": "Meeting with potential European distribution partners",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-36",
@@ -664,7 +730,8 @@
           "description": "Pitch session with Asian territory buyers",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-37",
@@ -674,7 +741,8 @@
           "description": "Meeting with Latin American distributors",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-38",
@@ -684,7 +752,8 @@
           "description": "Pitch to streaming platform acquisition teams",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-39",
@@ -694,7 +763,8 @@
           "description": "Follow-up meetings with North American buyers",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-40",
@@ -704,7 +774,8 @@
           "description": "Networking lunch with buyers",
           "location": "La Palme d'Or",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-41",
@@ -714,7 +785,8 @@
           "description": "Industry panel discussion",
           "location": "Palais des Festivals - Salon",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-42",
@@ -724,7 +796,8 @@
           "description": "Meeting with Middle Eastern distributors",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-43",
@@ -734,7 +807,8 @@
           "description": "Red carpet premiere of our feature film",
           "location": "Grand Th\u00e9\u00e2tre Lumi\u00e8re",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-44",
@@ -744,7 +818,8 @@
           "description": "Meeting with British and Irish distributors",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-45",
@@ -754,7 +829,8 @@
           "description": "Industry networking reception",
           "location": "Port Pierre Canto",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-46",
@@ -764,7 +840,8 @@
           "description": "Follow-up meetings for deal terms",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-47",
@@ -774,7 +851,8 @@
           "description": "Last round of acquisition meetings",
           "location": "Market Booth",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-48",
@@ -784,7 +862,8 @@
           "description": "Pack up market booth materials",
           "location": "March\u00e9 du Film",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-49",
@@ -794,7 +873,8 @@
           "description": "Official market wrap event",
           "location": "Palais des Festivals",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-50",
@@ -803,7 +883,8 @@
           "title": "Hotel Check-out",
           "location": "H\u00f4tel Martinez",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-51",
@@ -813,7 +894,8 @@
           "description": "Air France AF3753, departs 15:00",
           "location": "Nice C\u00f4te d'Azur Airport",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         }
       ],
       "documents": [
@@ -821,29 +903,44 @@
           "id": "doc-10",
           "name": "Market Badges & Accreditation",
           "url": "https://drive.google.com/file/d/placeholder-cannes-badges",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": true
         },
         {
           "id": "doc-11",
           "name": "Booth Layout & Materials",
           "url": "https://drive.google.com/file/d/placeholder-booth",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-12",
           "name": "Buyer Meeting Schedule",
           "url": "https://docs.google.com/spreadsheets/d/placeholder-meetings",
-          "type": "spreadsheet"
+          "type": "spreadsheet",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-13",
           "name": "Film Screener Links",
           "url": "https://vimeo.com/placeholder-screener",
-          "type": "video"
+          "type": "video",
+          "assignedTravelerIds": [],
+          "pinned": false
         }
       ],
       "responses": [],
-      "notificationLogs": []
+      "notificationLogs": [],
+      "description": "Cannes market meetings and screening logistics.",
+      "badge": "on-hold",
+      "tags": [
+        "market",
+        "festival"
+      ],
+      "autoNotifyOnAssign": false
     },
     {
       "id": "trip-4",
@@ -894,7 +991,8 @@
           "description": "American Airlines AA123, arrives 11:15 local time",
           "location": "JFK Airport, Terminal 8",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-53",
@@ -904,7 +1002,8 @@
           "description": "The Culver Hotel, 9400 Culver Blvd",
           "location": "Culver City",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-54",
@@ -914,7 +1013,8 @@
           "description": "Color correction with David Kim at Company 3",
           "location": "Company 3 - Santa Monica",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-55",
@@ -924,7 +1024,8 @@
           "description": "Review VFX shots and discuss revisions",
           "location": "Digital Domain - Playa Vista",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-56",
@@ -934,7 +1035,8 @@
           "description": "Continue color correction work",
           "location": "Company 3 - Santa Monica",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-57",
@@ -944,7 +1046,8 @@
           "description": "Final mix session at Skywalker Sound",
           "location": "Skywalker Sound - Marin County",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-58",
@@ -954,7 +1057,8 @@
           "description": "Final score review and adjustments",
           "location": "Remote Nine - Hollywood",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-59",
@@ -964,7 +1068,8 @@
           "description": "Post-production team dinner",
           "location": "Gjelina",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-60",
@@ -974,7 +1079,8 @@
           "description": "Continue final mix",
           "location": "Skywalker Sound - Marin County",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-61",
@@ -984,7 +1090,8 @@
           "description": "Private test screening with focus group",
           "location": "ArcLight Hollywood",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-62",
@@ -994,7 +1101,8 @@
           "description": "Review test screening feedback with client",
           "location": "Hotel Conference Room",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         },
         {
           "id": "item-63",
@@ -1004,7 +1112,8 @@
           "description": "American Airlines AA456, departs 15:00",
           "location": "LAX Airport",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": false
         }
       ],
       "documents": [
@@ -1012,23 +1121,35 @@
           "id": "doc-14",
           "name": "Post-Production Schedule",
           "url": "https://drive.google.com/file/d/placeholder-post-schedule",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": true
         },
         {
           "id": "doc-15",
           "name": "Studio Booking Confirmations",
           "url": "https://drive.google.com/file/d/placeholder-studios",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-16",
           "name": "Client Notes & Feedback",
           "url": "https://docs.google.com/document/d/placeholder-notes",
-          "type": "document"
+          "type": "document",
+          "assignedTravelerIds": [],
+          "pinned": false
         }
       ],
       "responses": [],
-      "notificationLogs": []
+      "notificationLogs": [],
+      "description": "LA post week \u2014 edits, color, and sound sessions.",
+      "badge": "planning",
+      "tags": [
+        "post-production"
+      ],
+      "autoNotifyOnAssign": true
     },
     {
       "id": "trip-5",
@@ -1095,7 +1216,8 @@
           "description": "Air Canada AC101, arrives 10:30 local time",
           "location": "Newark Liberty Airport",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-65",
@@ -1105,7 +1227,8 @@
           "description": "Pick up camera and sound equipment",
           "location": "Vistek Toronto",
           "type": "transport",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-66",
@@ -1115,7 +1238,8 @@
           "description": "The Fairmont Royal York, 100 Front St W",
           "location": "Toronto",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-67",
@@ -1125,7 +1249,8 @@
           "description": "Review all location permits and access details",
           "location": "Hotel Conference Room",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-68",
@@ -1135,7 +1260,8 @@
           "description": "Documentary interview with primary subject",
           "location": "Subject's residence - Yorkville",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-69",
@@ -1145,7 +1271,8 @@
           "description": "Capture cityscape and establishing shots",
           "location": "Financial District",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-70",
@@ -1155,7 +1282,8 @@
           "description": "Crew dinner and day review",
           "location": "Canoe Restaurant",
           "type": "meal",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-71",
@@ -1165,7 +1293,8 @@
           "description": "Second documentary interview",
           "location": "University of Toronto Campus",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-72",
@@ -1175,7 +1304,8 @@
           "description": "Capture waterfront and harbor scenes",
           "location": "Harbourfront Centre",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-73",
@@ -1185,7 +1315,8 @@
           "description": "Third documentary interview",
           "location": "Distillery District Studio",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-74",
@@ -1195,7 +1326,8 @@
           "description": "Capture street scenes and public interactions",
           "location": "Kensington Market",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-75",
@@ -1205,7 +1337,8 @@
           "description": "Final primary interview",
           "location": "CBC Broadcasting Centre",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-76",
@@ -1215,7 +1348,8 @@
           "description": "Capture any missing footage identified during review",
           "location": "Various locations",
           "type": "activity",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-77",
@@ -1225,7 +1359,8 @@
           "description": "Return all rented equipment",
           "location": "Vistek Toronto",
           "type": "transport",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-78",
@@ -1234,7 +1369,8 @@
           "title": "Hotel Check-out",
           "location": "The Fairmont Royal York",
           "type": "accommodation",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         },
         {
           "id": "item-79",
@@ -1244,7 +1380,8 @@
           "description": "Air Canada AC102, departs 13:00",
           "location": "Toronto Pearson Airport",
           "type": "flight",
-          "assignedTravelerIds": []
+          "assignedTravelerIds": [],
+          "done": true
         }
       ],
       "documents": [
@@ -1252,29 +1389,44 @@
           "id": "doc-17",
           "name": "Interview Release Forms",
           "url": "https://drive.google.com/file/d/placeholder-releases",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": true
         },
         {
           "id": "doc-18",
           "name": "Location Permits Toronto",
           "url": "https://drive.google.com/file/d/placeholder-toronto-permits",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-19",
           "name": "Equipment Insurance",
           "url": "https://drive.google.com/file/d/placeholder-insurance",
-          "type": "application/pdf"
+          "type": "application/pdf",
+          "assignedTravelerIds": [],
+          "pinned": false
         },
         {
           "id": "doc-20",
           "name": "Shot List & Interview Questions",
           "url": "https://docs.google.com/document/d/placeholder-shotlist",
-          "type": "document"
+          "type": "document",
+          "assignedTravelerIds": [],
+          "pinned": false
         }
       ],
       "responses": [],
-      "notificationLogs": []
+      "notificationLogs": [],
+      "description": "Toronto documentary shoot with location moves.",
+      "badge": "wrap",
+      "tags": [
+        "documentary",
+        "multi-city"
+      ],
+      "autoNotifyOnAssign": false
     }
   ]
 }

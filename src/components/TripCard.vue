@@ -4,7 +4,7 @@
       <div class="flex justify-between items-start">
         <div class="flex-1 min-w-0">
           <CardTitle class="text-xl">{{ trip.name }}</CardTitle>
-          <CardDescription class="mt-1">{{ trip.destination }}</CardDescription>
+          <CardDescription v-if="trip.destination" class="mt-1">{{ trip.destination }}</CardDescription>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
@@ -67,16 +67,16 @@
           </div>
           <div class="space-y-2">
             <Label for="edit-trip-destination">Destination</Label>
-            <Input id="edit-trip-destination" v-model="editForm.destination" required />
+            <Input id="edit-trip-destination" v-model="editForm.destination" />
           </div>
           <div class="grid gap-4 sm:grid-cols-2">
             <div class="space-y-2">
               <Label for="edit-trip-start">Start date</Label>
-              <Input id="edit-trip-start" v-model="editForm.startDate" type="date" required />
+              <Input id="edit-trip-start" v-model="editForm.startDate" type="date" />
             </div>
             <div class="space-y-2">
               <Label for="edit-trip-end">End date</Label>
-              <Input id="edit-trip-end" v-model="editForm.endDate" type="date" required />
+              <Input id="edit-trip-end" v-model="editForm.endDate" type="date" />
             </div>
           </div>
           <DialogFooter>
@@ -109,7 +109,7 @@ import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import type { Trip, TripStatus } from '@/types'
-import { tripStatus } from '@/lib/tripHelpers'
+import { displayDateRange, tripStatus } from '@/lib/tripHelpers'
 import { useTripsStore } from '@/stores/trips'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -167,14 +167,14 @@ const statusBadgeClass = computed(() => statusBadgeClassMap[status.value])
 const statusLabel = computed(() => statusLabelMap[status.value])
 
 const dateRange = computed(() => {
-  const start = new Date(props.trip.startDate)
-  const end = new Date(props.trip.endDate)
+  const { startDate, endDate } = displayDateRange(props.trip)
+  if (!startDate || !endDate) return 'Dates TBD'
   const formatter = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
   })
-  return `${formatter.format(start)} - ${formatter.format(end)}`
+  return `${formatter.format(new Date(startDate))} - ${formatter.format(new Date(endDate))}`
 })
 
 const viewDetails = () => {
@@ -183,28 +183,28 @@ const viewDetails = () => {
 
 function openEdit() {
   editForm.name = props.trip.name
-  editForm.destination = props.trip.destination
-  editForm.startDate = props.trip.startDate
-  editForm.endDate = props.trip.endDate
+  editForm.destination = props.trip.destination ?? ''
+  editForm.startDate = props.trip.startDate ?? ''
+  editForm.endDate = props.trip.endDate ?? ''
   editOpen.value = true
 }
 
 function saveEdit() {
   const name = editForm.name.trim()
   const destination = editForm.destination.trim()
-  if (!name || !destination || !editForm.startDate || !editForm.endDate) {
-    toast.error('All fields are required')
+  if (!name) {
+    toast.error('Name is required')
     return
   }
-  if (editForm.endDate < editForm.startDate) {
+  if (editForm.startDate && editForm.endDate && editForm.endDate < editForm.startDate) {
     toast.error('End date must be on or after start date')
     return
   }
   updateTrip(props.trip.id, {
     name,
-    destination,
-    startDate: editForm.startDate,
-    endDate: editForm.endDate
+    destination: destination || undefined,
+    startDate: editForm.startDate || undefined,
+    endDate: editForm.endDate || undefined
   })
   toast.success('Trip updated')
   editOpen.value = false
@@ -213,6 +213,10 @@ function saveEdit() {
 function handleDuplicate() {
   const trip = createTrip({
     name: `${props.trip.name} (Copy)`,
+    description: props.trip.description,
+    badge: props.trip.badge,
+    tags: [...props.trip.tags],
+    autoNotifyOnAssign: props.trip.autoNotifyOnAssign,
     destination: props.trip.destination,
     startDate: props.trip.startDate,
     endDate: props.trip.endDate

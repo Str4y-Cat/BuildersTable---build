@@ -10,6 +10,36 @@ export type ItineraryItemType =
 export type ResponseStatus = 'pending' | 'confirmed' | 'declined'
 export type NotifyChannel = 'email' | 'telegram'
 
+/** Fixed tag set for trips (not freeform). */
+export type TripTag =
+  | 'festival'
+  | 'commercial'
+  | 'documentary'
+  | 'post-production'
+  | 'market'
+  | 'multi-city'
+
+/** Status-style badge shown on board cards and trip header. */
+export type TripBadge = 'planning' | 'locked' | 'on-hold' | 'wrap'
+
+export const TRIP_DESCRIPTION_MAX = 280
+
+export const TRIP_TAGS: readonly TripTag[] = [
+  'festival',
+  'commercial',
+  'documentary',
+  'post-production',
+  'market',
+  'multi-city'
+] as const
+
+export const TRIP_BADGES: readonly TripBadge[] = [
+  'planning',
+  'locked',
+  'on-hold',
+  'wrap'
+] as const
+
 export interface User {
   id: string
   name: string
@@ -42,6 +72,8 @@ export interface ItineraryItem {
   /** Empty = all travelers on the trip */
   assignedTravelerIds: string[]
   lastUpdatedAt?: string // ISO datetime
+  /** Task-view checkbox (same entry as timeline) */
+  done: boolean
 }
 
 export interface Document {
@@ -49,6 +81,9 @@ export interface Document {
   name: string
   url: string
   type: string
+  /** Empty = all travelers */
+  assignedTravelerIds: string[]
+  pinned: boolean
 }
 
 export interface EntryResponse {
@@ -71,9 +106,19 @@ export interface NotificationLog {
 export interface Trip {
   id: string
   name: string
-  destination: string
-  startDate: string
-  endDate: string
+  /** Optional — may be filled later; not required on create */
+  destination?: string
+  /** Optional overrides; prefer derived range from itinerary dates when absent */
+  startDate?: string
+  endDate?: string
+  description: string
+  badge: TripBadge
+  tags: TripTag[]
+  /**
+   * When true, auto-notify on first assign to an entry/document.
+   * When false, only manual Notify (or first-assign disabled).
+   */
+  autoNotifyOnAssign: boolean
   travelers: Traveler[]
   itinerary: ItineraryItem[]
   documents: Document[]
@@ -93,4 +138,9 @@ export interface ResponseRollup {
   declined: number
   pending: number
   total: number
+}
+
+export interface DerivedDateRange {
+  startDate: string | null
+  endDate: string | null
 }

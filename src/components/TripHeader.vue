@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div class="min-w-0 space-y-2">
       <h1 class="text-2xl font-bold tracking-tight">{{ trip.name }}</h1>
-      <p class="text-muted-foreground">{{ trip.destination }}</p>
+      <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
       <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
       <div class="flex flex-wrap gap-2 pt-1">
         <Badge variant="secondary">{{ trip.travelers.length }} travelers</Badge>
@@ -29,7 +29,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import type { Trip } from '@/types'
-import { responseRollup } from '@/lib/tripHelpers'
+import { displayDateRange, responseRollup } from '@/lib/tripHelpers'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ExternalLink } from '@lucide/vue'
@@ -41,14 +41,14 @@ const props = defineProps<{
 const router = useRouter()
 
 const dateRange = computed(() => {
-  const start = new Date(props.trip.startDate)
-  const end = new Date(props.trip.endDate)
+  const { startDate, endDate } = displayDateRange(props.trip)
+  if (!startDate || !endDate) return 'Dates TBD'
   const formatter = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
   })
-  return `${formatter.format(start)} - ${formatter.format(end)}`
+  return `${formatter.format(new Date(startDate))} - ${formatter.format(new Date(endDate))}`
 })
 
 const pendingCount = computed(() =>

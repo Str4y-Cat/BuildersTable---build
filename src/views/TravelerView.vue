@@ -17,7 +17,7 @@
       <template v-else>
         <header class="space-y-2 border-b pb-6">
           <h1 class="text-2xl font-bold tracking-tight break-words">{{ trip.name }}</h1>
-          <p class="text-muted-foreground">{{ trip.destination }}</p>
+          <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
           <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
           <p class="pt-2 text-base">
             Hi {{ traveler.name }}, here’s your itinerary for {{ trip.name }}.
@@ -56,10 +56,10 @@
           <div class="flex items-baseline justify-between gap-2">
             <h2 class="text-lg font-semibold">Documents</h2>
             <span class="text-sm text-muted-foreground">
-              {{ trip.documents.length }}
+              {{ travelerDocuments.length }}
             </span>
           </div>
-          <DocumentList :documents="trip.documents" />
+          <DocumentList :documents="travelerDocuments" />
         </section>
 
         <footer class="border-t pt-6">
@@ -78,7 +78,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
-import { entriesForTraveler } from '@/lib/tripHelpers'
+import { displayDateRange, documentsForTraveler, entriesForTraveler } from '@/lib/tripHelpers'
 import type { ItineraryItem } from '@/types'
 import TravelerEntryCard from '@/components/TravelerEntryCard.vue'
 import DocumentList from '@/components/DocumentList.vue'
@@ -98,14 +98,19 @@ const traveler = computed(() => resolved.value!.traveler)
 
 const dateRange = computed(() => {
   if (!resolved.value) return ''
-  const start = new Date(trip.value.startDate)
-  const end = new Date(trip.value.endDate)
+  const { startDate, endDate } = displayDateRange(trip.value)
+  if (!startDate || !endDate) return 'Dates TBD'
   const formatter = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
   })
-  return `${formatter.format(start)} - ${formatter.format(end)}`
+  return `${formatter.format(new Date(startDate))} - ${formatter.format(new Date(endDate))}`
+})
+
+const travelerDocuments = computed(() => {
+  if (!resolved.value) return []
+  return documentsForTraveler(trip.value, traveler.value.id)
 })
 
 const dayFormatter = new Intl.DateTimeFormat('en-US', {
