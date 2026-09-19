@@ -94,6 +94,7 @@ import type { Trip } from '@/types'
 import { displayDateRange, isDateRangeDerived, responseRollup, taskProgress } from '@/lib/tripHelpers'
 import { tripBadgeClass, tripBadgeLabel, tripTagLabel } from '@/lib/tripLabels'
 import { downloadTripPdf } from '@/lib/tripPdf'
+import { navigateBack } from '@/lib/navigateBack'
 import { useTripsStore } from '@/stores/trips'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -138,11 +139,7 @@ function onAutoNotifyChange(value: boolean | 'indeterminate') {
 }
 
 const goBack = () => {
-  if (window.history.state?.back != null) {
-    router.back()
-    return
-  }
-  router.push('/dashboard')
+  navigateBack(router, '/dashboard')
 }
 
 function downloadPdf() {

@@ -129,6 +129,30 @@
     }
 }
 
+/* Landing page — marketing surface only. Uses existing tokens; adds no new ones. */
+.landing-hero-bg {
+  background-image:
+    radial-gradient(
+      ellipse 80% 55% at 50% 0%,
+      color-mix(in oklch, var(--muted) 85%, transparent),
+      transparent 70%
+    );
+}
+
+.landing-hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 60% 45% at 50% 0%, #000, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 45% at 50% 0%, #000, transparent 75%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 /* Route fade — Phase 8 polish */
 .fade-enter-active,
 .fade-leave-active {

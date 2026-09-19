@@ -2,21 +2,23 @@
 
 Post–Phase 8 UX feedback to implement in the Vue mock. Frontend-only; keep [04-design-themes.md](./04-design-themes.md). Prefer this doc over older screen notes when they conflict.
 
-**Status:** complete through suggested order (including New Trip sheet create).
+**Status:** in progress — through PDF (step 9); New Trip create (step 10) still deferred.
 
 ---
 
 ## Locked decisions
 
-| Topic | Decision |
-|---|---|
-| Kanban columns | **Status-based:** Upcoming / Ongoing / Past |
-| Description cap | **Character count** (set a concrete max in UI + validation, e.g. 280) |
-| Badge | **Status-style chip**; show on **board card and trip header** |
-| Tags | **Fixed set** (curated list in code/seed—not freeform) |
+
+| Topic              | Decision                                                                                                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kanban columns     | **Status-based:** Upcoming / Ongoing / Past                                                                                                  |
+| Description cap    | **Character count** (set a concrete max in UI + validation, e.g. 280)                                                                        |
+| Badge              | **Status-style chip**; show on **board card and trip header**                                                                                |
+| Tags               | **Fixed set** (curated list in code/seed—not freeform)                                                                                       |
 | Tasks vs itinerary | **Itinerary items are events**; **some events have optional sub-tasks** (`tasks[]`) that can be checked off — not the event itself as a task |
-| Auto-notify | **Only on first assign**, or via an **explicit toggle**—not on every assignment edit |
-| PDF | **Client PDF library** (e.g. html2pdf / jsPDF-style) for Download PDF |
+| Auto-notify        | **Only on first assign**, or via an **explicit toggle**—not on every assignment edit                                                         |
+| PDF                | **Client PDF library** (e.g. html2pdf / jsPDF-style) for Download PDF                                                                        |
+
 
 ---
 
@@ -123,7 +125,6 @@ Reorient the mock around a **Kanban / board** mental model on the dashboard, ric
 7. **Notify** — first-assign / toggle auto-notify; manual Notify scoped to assigned/selected only.
 8. **Itinerary polish** — traveler search on assign; hover hints.
 9. **PDF** — client library on curator + traveler (documents top on traveler view).
-10. **New Trip create** — sheet/panel create; character-count description; no destination/dates in form.
 
 ---
 
@@ -132,3 +133,4 @@ Reorient the mock around a **Kanban / board** mental model on the dashboard, ric
 - Laravel / real auth / real email·Telegram delivery
 - Real file upload storage (UI for assign/pin is enough in mock)
 - Shipping the mock as the hackathon submission
+

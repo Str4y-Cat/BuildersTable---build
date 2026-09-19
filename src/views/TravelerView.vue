@@ -18,11 +18,11 @@
         <button
           type="button"
           class="mb-4 inline-flex items-center text-sm text-muted-foreground transition-opacity hover:text-foreground hover:opacity-80"
-          title="Return to trip manage page"
-          @click="goBackToTrip"
+          title="Go back"
+          @click="goBack"
         >
           <ArrowLeft class="mr-1.5 h-4 w-4" />
-          Back to trip
+          Back
         </button>
 
         <header class="space-y-4 border-b pb-6">
@@ -35,15 +35,16 @@
                 Hi {{ traveler.name }}, here’s your itinerary for {{ trip.name }}.
               </p>
             </div>
-            <Button
-              variant="outline"
-              class="shrink-0"
-              title="Download your itinerary and documents as PDF"
-              @click="downloadPdf"
-            >
-              <Download class="mr-2 h-4 w-4" />
-              Download PDF
-            </Button>
+            <div class="flex shrink-0 flex-wrap gap-2">
+              <Button
+                variant="outline"
+                title="Download your itinerary and documents as PDF"
+                @click="downloadPdf"
+              >
+                <Download class="mr-2 h-4 w-4" />
+                Download PDF
+              </Button>
+            </div>
           </div>
         </header>
 
@@ -86,7 +87,11 @@
           </div>
         </section>
 
-        <footer class="border-t pt-6">
+        <footer class="flex flex-wrap gap-2 border-t pt-6">
+          <Button variant="outline" title="Go back" @click="goBack">
+            <ArrowLeft class="mr-2 h-4 w-4" />
+            Back
+          </Button>
           <Button variant="outline" @click="contactCurator">
             <Mail class="mr-2 h-4 w-4" />
             Contact curator
@@ -104,6 +109,7 @@ import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
 import { displayDateRange, documentsForTraveler, entriesForTraveler } from '@/lib/tripHelpers'
 import { downloadTripPdf } from '@/lib/tripPdf'
+import { navigateBack } from '@/lib/navigateBack'
 import type { ItineraryItem } from '@/types'
 import TravelerEntryCard from '@/components/TravelerEntryCard.vue'
 import DocumentList from '@/components/DocumentList.vue'
@@ -170,12 +176,11 @@ function goDashboard() {
   router.push('/dashboard')
 }
 
-function goBackToTrip() {
-  if (window.history.state?.back != null) {
-    router.back()
-    return
-  }
-  router.push(`/dashboard/trips/${trip.value.id}`)
+function goBack() {
+  const fallback = resolved.value
+    ? `/dashboard/trips/${resolved.value.trip.id}`
+    : '/dashboard'
+  navigateBack(router, fallback)
 }
 
 function downloadPdf() {

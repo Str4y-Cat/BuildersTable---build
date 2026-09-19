@@ -20,7 +20,8 @@
           <button
             type="button"
             class="mb-4 inline-flex items-center text-sm text-muted-foreground transition-opacity hover:text-foreground hover:opacity-80"
-            @click="goDashboard"
+            title="Back to My Trips"
+            @click="goBack"
           >
             <ArrowLeft class="mr-1.5 h-4 w-4" />
             My Trips
@@ -117,6 +118,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
 import { taskProgress } from '@/lib/tripHelpers'
+import { navigateBack } from '@/lib/navigateBack'
 import type { ItineraryItem } from '@/types'
 import TripHeader from '@/components/TripHeader.vue'
 import ItineraryTimeline from '@/components/ItineraryTimeline.vue'
@@ -163,11 +165,11 @@ const panelItem = computed(() => {
 })
 
 const goDashboard = () => {
-  if (window.history.state?.back != null) {
-    router.back()
-    return
-  }
   router.push('/dashboard')
+}
+
+const goBack = () => {
+  navigateBack(router, '/dashboard')
 }
 
 function openCreate() {
