@@ -2,7 +2,7 @@
 
 Post–Phase 8 UX feedback to implement in the Vue mock. Frontend-only; keep [04-design-themes.md](./04-design-themes.md). Prefer this doc over older screen notes when they conflict.
 
-**Status:** in progress — through PDF (step 9); New Trip create (step 10) still deferred.
+**Status:** complete through suggested order (including New Trip sheet create).
 
 ---
 
@@ -123,7 +123,7 @@ Reorient the mock around a **Kanban / board** mental model on the dashboard, ric
 7. **Notify** — first-assign / toggle auto-notify; manual Notify scoped to assigned/selected only.
 8. **Itinerary polish** — traveler search on assign; hover hints.
 9. **PDF** — client library on curator + traveler (documents top on traveler view).
-10. **New Trip create** — sheet/panel create; character-count description; no destination/dates in form (deferred; keep dialog for now).
+10. **New Trip create** — sheet/panel create; character-count description; no destination/dates in form.
 
 ---
 

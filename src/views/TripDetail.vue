@@ -163,6 +163,10 @@ const panelItem = computed(() => {
 })
 
 const goDashboard = () => {
+  if (window.history.state?.back != null) {
+    router.back()
+    return
+  }
   router.push('/dashboard')
 }
 

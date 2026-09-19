@@ -15,6 +15,16 @@
 
       <!-- Found -->
       <template v-else>
+        <button
+          type="button"
+          class="mb-4 inline-flex items-center text-sm text-muted-foreground transition-opacity hover:text-foreground hover:opacity-80"
+          title="Return to trip manage page"
+          @click="goBackToTrip"
+        >
+          <ArrowLeft class="mr-1.5 h-4 w-4" />
+          Back to trip
+        </button>
+
         <header class="space-y-4 border-b pb-6">
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div class="min-w-0 space-y-2">
@@ -98,7 +108,7 @@ import type { ItineraryItem } from '@/types'
 import TravelerEntryCard from '@/components/TravelerEntryCard.vue'
 import DocumentList from '@/components/DocumentList.vue'
 import { Button } from '@/components/ui/button'
-import { Download, Mail } from '@lucide/vue'
+import { ArrowLeft, Download, Mail } from '@lucide/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -158,6 +168,14 @@ const dayGroups = computed(() => {
 
 function goDashboard() {
   router.push('/dashboard')
+}
+
+function goBackToTrip() {
+  if (window.history.state?.back != null) {
+    router.back()
+    return
+  }
+  router.push(`/dashboard/trips/${trip.value.id}`)
 }
 
 function downloadPdf() {

@@ -138,6 +138,10 @@ function onAutoNotifyChange(value: boolean | 'indeterminate') {
 }
 
 const goBack = () => {
+  if (window.history.state?.back != null) {
+    router.back()
+    return
+  }
   router.push('/dashboard')
 }
 

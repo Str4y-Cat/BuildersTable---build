@@ -63,7 +63,7 @@
       <TripBoard v-else :trips="filteredTrips" />
     </main>
 
-    <NewTripDialog v-model:open="newTripOpen" />
+    <NewTripPanel v-model:open="newTripOpen" />
   </div>
 </template>
 
@@ -72,7 +72,7 @@ import { computed, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
 import TripBoard from '@/components/TripBoard.vue'
-import NewTripDialog from '@/components/NewTripDialog.vue'
+import NewTripPanel from '@/components/NewTripPanel.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
