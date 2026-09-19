@@ -1,7 +1,7 @@
 <template>
   <section class="border-t border-border py-24 sm:py-32">
     <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+      <h2 :class="displayTitle">
         Change it once. Everyone affected knows.
       </h2>
       <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
@@ -39,4 +39,5 @@
 import { RouterLink } from 'vue-router'
 import { ArrowRight } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
+import { displayTitle } from '@/lib/typography'
 </script>

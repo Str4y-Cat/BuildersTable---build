@@ -15,7 +15,7 @@
         </Badge>
       </div>
 
-      <h1 class="text-2xl font-bold tracking-tight">{{ trip.name }}</h1>
+      <h1 :class="pageTitle">{{ trip.name }}</h1>
       <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
       <p class="text-sm text-muted-foreground">
         {{ dateRange }}
@@ -100,6 +100,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ArrowLeft, Download, ExternalLink } from '@lucide/vue'
+import { pageTitle } from '@/lib/typography'
 
 const props = defineProps<{
   trip: Trip

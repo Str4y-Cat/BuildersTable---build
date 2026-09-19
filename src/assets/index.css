@@ -45,6 +45,10 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) + 4px);
+    /* Without these, rounded-2xl/3xl fall back to Tailwind's stock 1rem/1.5rem
+       and sit off the token scale — see docs/09-design-system-unification.md */
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 16px);
 }
 
 :root {

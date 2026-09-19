@@ -232,3 +232,13 @@ export function generateShareCode(name: string, tripId: string): string {
 export function newId(prefix: string): string {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
 }
+
+/** Up to two initials for avatar fallbacks, e.g. "Marcus Williams" → "MW". */
+export function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .map((part) => part[0] ?? '')
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}

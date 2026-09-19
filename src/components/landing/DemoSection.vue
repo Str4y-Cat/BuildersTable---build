@@ -4,7 +4,7 @@
       <!-- Solution intro — the pain → product bridge, capped at two sentences -->
       <div class="mx-auto max-w-3xl text-center">
         <h2
-          class="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+          :class="displayTitle"
         >
           One live itinerary instead of three artifacts.
         </h2>
@@ -31,4 +31,5 @@
 <script setup lang="ts">
 import BrowserFrame from './BrowserFrame.vue'
 import PropagationDemo from './PropagationDemo.vue'
+import { displayTitle } from '@/lib/typography'
 </script>

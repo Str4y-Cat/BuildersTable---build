@@ -2,11 +2,11 @@
   <section id="value" class="scroll-mt-20 border-t border-border bg-muted/30 py-24 sm:py-32">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl">
-        <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <p :class="eyebrow">
           What changes
         </p>
         <h2
-          class="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+          :class="[displayTitle, 'mt-4']"
         >
           Three things the sheet structurally can't do.
         </h2>
@@ -50,6 +50,7 @@
 
 <script setup lang="ts">
 import { BellRing, CheckCheck, Layers } from '@lucide/vue'
+import { displayTitle, eyebrow } from '@/lib/typography'
 
 /**
  * Content is lifted from the value-prop table in the build spec.

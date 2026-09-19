@@ -99,10 +99,39 @@ Small badge or accent dot on recently changed entries—visible but not louder t
 
 ## Typography & hierarchy
 
-- Page title: `text-2xl font-bold` (match dashboard)
-- Section titles: `text-lg font-semibold`
-- Meta / dates: `text-sm text-muted-foreground`
-- Avoid competing H1-level headlines beside the trip name
+**Do not hand-write heading classes.** Import the role from `src/lib/typography.ts` and bind it — one definition shared by the landing page and the app, so the two can't drift.
+
+```vue
+<h1 :class="pageTitle">My Trips</h1>
+<h2 :class="[sectionTitle, 'mb-2']">No trips yet</h2>
+```
+
+| Role | Export | Value |
+|---|---|---|
+| Landing hero | `heroTitle` | `text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl` |
+| Landing section | `displayTitle` | `text-3xl font-semibold leading-tight tracking-tight sm:text-4xl` |
+| App page title | `pageTitle` | `text-2xl font-semibold tracking-tight` |
+| App section heading | `sectionTitle` | `text-lg font-semibold tracking-tight` |
+| Uppercase label | `eyebrow` | `text-xs font-medium uppercase tracking-wide text-muted-foreground` |
+| Meta / dates | `metaText` | `text-sm text-muted-foreground` |
+
+Rules:
+
+- **`font-semibold`, never `font-bold`.** Headings carry weight through tracking, not blackness.
+- **`tracking-tight` on every heading.** Eyebrows go the other way — `tracking-wide`.
+- Eyebrows are `font-medium`, not `font-semibold` — they label, they don't compete.
+- Avoid competing H1-level headlines beside the trip name.
+
+## Density — where the two surfaces intentionally differ
+
+The landing page and the app share the *system*, not the *density*. These differences are correct and must not be "fixed":
+
+| | Landing | App |
+|---|---|---|
+| Section rhythm | `py-24` / `py-32` | `py-8` |
+| Container | `max-w-6xl` | `max-w-7xl` (traveler view `max-w-3xl`) |
+
+The app is a dense coordination tool; the landing is a marketing page.
 
 ## Motion & interaction
 
@@ -126,7 +155,27 @@ Always:
 - Secondary: outline / ghost
 - Destructive: destructive variant, still behind confirm
 - Separators and muted labels for sidebar sections
-- Avatars with initials for travelers (existing Avatar pattern)
+- Avatars with initials for travelers — always via `initials()` from `src/lib/tripHelpers.ts`, never a local copy
+
+### Edges and elevation
+
+- **Hairline edges, not drop shadows.** `border-border` for groupings and surfaces; the `Card` primitive's own `ring-1 ring-foreground/10` for cards. Both land at ~8–10% black — either is fine, don't convert between them.
+- **Hover states darken the ring**, they don't add a shadow: `hover:ring-foreground/20`.
+- **One sanctioned shadow:** `landing/BrowserFrame.vue`'s layered shadow, the deliberate floating-product-shot treatment. Landing-only. Nothing else in either surface gets a drop shadow.
+
+### Radii — all token-derived
+
+Every step derives from `--radius: 0.875rem` in `src/assets/index.css`. Never use a raw pixel radius.
+
+| Class | Value | Use |
+|---|---|---|
+| `rounded-md` | 12px | inline controls, popovers |
+| `rounded-lg` | 14px | grouped lists, empty states |
+| `rounded-xl` | 18px | cards, panels |
+| `rounded-2xl` | 22px | landing surfaces |
+| `rounded-full` | — | avatars, and any avatar-plus-name chip |
+
+> `--radius-2xl` / `--radius-3xl` must stay defined in `@theme inline`. Without them Tailwind silently falls back to its stock `1rem`/`1.5rem`, which sits *off* this scale — `rounded-2xl` would land at 16px, below `rounded-xl`'s 18px.
 
 ## Reference vs theme
 

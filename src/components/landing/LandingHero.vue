@@ -9,7 +9,7 @@
         </span>
 
         <h1
-          class="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+          :class="[heroTitle, 'mt-6']"
         >
           One schedule change.<br class="hidden sm:block" />
           Every traveler notified.
@@ -61,4 +61,5 @@ import { ArrowRight } from '@lucide/vue'
 import { Button } from '@/components/ui/button'
 import BrowserFrame from './BrowserFrame.vue'
 import HeroProductShot from './HeroProductShot.vue'
+import { heroTitle } from '@/lib/typography'
 </script>

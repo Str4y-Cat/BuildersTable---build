@@ -24,14 +24,6 @@ export const TRIP_NAME = 'Sundance Film Festival 2026'
 export const TRIP_DESTINATION = 'Park City, Utah'
 export const TRIP_DATES = 'Jan 23 – Jan 28, 2026'
 
-export function initials(name: string): string {
-  return name
-    .split(' ')
-    .map((part) => part[0] ?? '')
-    .join('')
-    .toUpperCase()
-}
-
 /** The three travelers attached to the call-time item the demo edits. */
 export const AFFECTED_TRAVELERS = [
   { id: 'traveler-1', name: 'Marcus Williams', role: 'Director' },

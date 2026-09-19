@@ -30,7 +30,7 @@
 
           <!-- Sub-tasks for this event -->
           <section class="space-y-3">
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <h3 :class="eyebrow">
               Sub-tasks
             </h3>
 
@@ -133,7 +133,7 @@
           <!-- Crew responses for this event -->
           <section class="space-y-3">
             <div class="flex items-baseline justify-between gap-2">
-              <h3 class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              <h3 :class="eyebrow">
                 Crew responses
               </h3>
               <ResponseRollup :trip="trip" :item="item" />
@@ -222,6 +222,7 @@ import {
   affectedTravelers,
   eventTaskProgress,
   getResponse,
+  initials,
   isRecentlyUpdated
 } from '@/lib/tripHelpers'
 import { itemTypeBadgeClass, itemTypeLabel } from '@/lib/itemTypeStyles'
@@ -242,6 +243,7 @@ import {
   SheetTitle
 } from '@/components/ui/sheet'
 import { X } from '@lucide/vue'
+import { eyebrow } from '@/lib/typography'
 
 const props = defineProps<{
   open: boolean
@@ -365,12 +367,4 @@ function onDocumentsChange(ids: string[]) {
   updateItineraryItem(props.trip.id, props.item.id, { documentIds: ids })
 }
 
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-}
 </script>

@@ -2,7 +2,7 @@
   <Card
     role="button"
     tabindex="0"
-    class="cursor-pointer transition-shadow duration-200 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    class="cursor-pointer transition-all duration-200 hover:ring-foreground/20 outline-none focus-visible:ring-2 focus-visible:ring-ring"
     @click="viewDetails"
     @keydown.enter.prevent="viewDetails"
     @keydown.space.prevent="viewDetails"

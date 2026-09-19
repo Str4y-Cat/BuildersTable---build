@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <!-- Not found -->
       <div v-if="!resolved" class="py-16 text-center">
-        <h1 class="text-2xl font-bold">Itinerary not found</h1>
+        <h1 :class="pageTitle">Itinerary not found</h1>
         <p class="mt-2 text-muted-foreground">
           No traveler matches share code
           <span class="font-medium text-foreground">{{ shareCode }}</span>.
@@ -28,7 +28,7 @@
         <header class="space-y-4 border-b pb-6">
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div class="min-w-0 space-y-2">
-              <h1 class="text-2xl font-bold tracking-tight break-words">{{ trip.name }}</h1>
+              <h1 :class="[pageTitle, 'break-words']">{{ trip.name }}</h1>
               <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
               <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
               <p class="pt-1 text-base">
@@ -51,7 +51,7 @@
         <!-- Documents at the top (locked decision) -->
         <section class="space-y-3 border-b py-8">
           <div class="flex items-baseline justify-between gap-2">
-            <h2 class="text-lg font-semibold">Documents</h2>
+            <h2 :class="sectionTitle">Documents</h2>
             <span class="text-sm text-muted-foreground">
               {{ travelerDocuments.length }}
             </span>
@@ -60,7 +60,7 @@
         </section>
 
         <section class="space-y-6 py-8">
-          <h2 class="text-lg font-semibold">Your schedule</h2>
+          <h2 :class="sectionTitle">Your schedule</h2>
 
           <div
             v-if="dayGroups.length === 0"
@@ -115,6 +115,7 @@ import TravelerEntryCard from '@/components/TravelerEntryCard.vue'
 import DocumentList from '@/components/DocumentList.vue'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Download, Mail } from '@lucide/vue'
+import { pageTitle, sectionTitle } from '@/lib/typography'
 
 const route = useRoute()
 const router = useRouter()

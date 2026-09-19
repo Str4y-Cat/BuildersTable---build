@@ -3,7 +3,7 @@
     <header class="border-b">
       <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <div class="flex flex-wrap items-center gap-3 sm:gap-4">
-          <h1 class="text-2xl font-bold">My Trips</h1>
+          <h1 :class="pageTitle">My Trips</h1>
           <Button @click="newTripOpen = true">
             <Plus class="mr-2 h-4 w-4" />
             New Trip
@@ -43,7 +43,7 @@
 
       <div v-if="trips.length === 0" class="py-12 text-center">
         <CalendarDays class="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-        <h2 class="mb-2 text-lg font-semibold">No trips yet</h2>
+        <h2 :class="[sectionTitle, 'mb-2']">No trips yet</h2>
         <p class="text-sm text-muted-foreground">
           Create your first trip to get started
         </p>
@@ -54,7 +54,7 @@
       </div>
 
       <div v-else-if="filteredTrips.length === 0" class="py-12 text-center">
-        <h2 class="mb-2 text-lg font-semibold">No matching trips</h2>
+        <h2 :class="[sectionTitle, 'mb-2']">No matching trips</h2>
         <p class="text-sm text-muted-foreground">
           Try a different search
         </p>
@@ -71,6 +71,8 @@
 import { computed, ref } from 'vue'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
+import { initials } from '@/lib/tripHelpers'
+import { pageTitle, sectionTitle } from '@/lib/typography'
 import TripBoard from '@/components/TripBoard.vue'
 import NewTripDialog from '@/components/NewTripDialog.vue'
 import { Button } from '@/components/ui/button'
@@ -89,10 +91,7 @@ const { currentUser, trips } = useTripsStore()
 const newTripOpen = ref(false)
 const searchQuery = ref('')
 
-const userInitials = computed(() => {
-  const names = currentUser.value.name.split(' ')
-  return names.map((n) => n[0]).join('').toUpperCase()
-})
+const userInitials = computed(() => initials(currentUser.value.name))
 
 const filteredTrips = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()

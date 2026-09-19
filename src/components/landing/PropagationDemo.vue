@@ -86,7 +86,7 @@
               <span
                 v-for="person in AFFECTED_TRAVELERS"
                 :key="person.id"
-                class="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] transition-all duration-500"
+                class="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs transition-all duration-500"
                 :class="
                   travelersLit
                     ? 'border-foreground/25 bg-background font-medium text-foreground'
@@ -239,9 +239,9 @@ import {
   DEMO_ITEM,
   TRIP_DESTINATION,
   TRIP_NAME,
-  UNAFFECTED_TRAVELERS,
-  initials
+  UNAFFECTED_TRAVELERS
 } from './mockContent'
+import { initials } from '@/lib/tripHelpers'
 
 type Phase = 'idle' | 'edit' | 'propagate' | 'notify' | 'confirm' | 'hold'
 

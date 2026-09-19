@@ -3,11 +3,11 @@
   <section id="problem" class="dark scroll-mt-20 bg-background py-24 text-foreground sm:py-32">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl">
-        <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+        <p :class="eyebrow">
           The current workflow
         </p>
         <h2
-          class="mt-4 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+          :class="[displayTitle, 'mt-4']"
         >
           Three artifacts, kept in sync by hand.
         </h2>
@@ -46,7 +46,7 @@
 
         <div class="space-y-4">
           <div class="rounded-2xl border border-border bg-card p-5">
-            <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <p :class="eyebrow">
               What it costs you
             </p>
             <p class="mt-3 text-sm leading-relaxed">
@@ -55,7 +55,7 @@
             </p>
           </div>
           <div class="rounded-2xl border border-border bg-card p-5">
-            <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <p :class="eyebrow">
               Today's patch
             </p>
             <p class="mt-3 text-sm leading-relaxed">
@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { FileSpreadsheet, Inbox, FileText } from '@lucide/vue'
+import { displayTitle, eyebrow } from '@/lib/typography'
 
 const artifacts = [
   {

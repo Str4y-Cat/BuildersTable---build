@@ -11,7 +11,7 @@
           class="h-4 w-4 shrink-0 text-muted-foreground transition-transform"
           :class="open ? 'rotate-180' : ''"
         />
-        <h2 class="text-lg font-semibold">Documents</h2>
+        <h2 :class="sectionTitle">Documents</h2>
         <span class="text-sm text-muted-foreground">{{ documents.length }}</span>
         <Badge
           v-if="pinnedCount"
@@ -93,6 +93,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { ChevronDown, Plus } from '@lucide/vue'
+import { sectionTitle } from '@/lib/typography'
 
 const props = withDefaults(
   defineProps<{

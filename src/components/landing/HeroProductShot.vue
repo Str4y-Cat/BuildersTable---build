@@ -74,9 +74,9 @@ import {
   TRIP_DATES,
   TRIP_DESTINATION,
   TRIP_NAME,
-  UNAFFECTED_TRAVELERS,
-  initials
+  UNAFFECTED_TRAVELERS
 } from './mockContent'
+import { initials } from '@/lib/tripHelpers'
 
 const railTravelers = [...AFFECTED_TRAVELERS, ...UNAFFECTED_TRAVELERS]
 </script>

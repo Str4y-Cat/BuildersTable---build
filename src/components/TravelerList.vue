@@ -11,7 +11,7 @@
           class="h-4 w-4 shrink-0 text-muted-foreground transition-transform"
           :class="open ? 'rotate-180' : ''"
         />
-        <h2 class="text-lg font-semibold">Travelers</h2>
+        <h2 :class="sectionTitle">Travelers</h2>
         <span class="text-sm text-muted-foreground">{{ trip.travelers.length }}</span>
       </button>
       <Button size="sm" class="shrink-0" @click.stop="formOpen = true">
@@ -97,6 +97,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { ChevronDown, Plus } from '@lucide/vue'
+import { sectionTitle } from '@/lib/typography'
 
 const props = defineProps<{
   trip: Trip

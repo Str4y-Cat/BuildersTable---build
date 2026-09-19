@@ -5,7 +5,7 @@
   >
     <div class="space-y-1.5">
       <div class="flex items-baseline justify-between gap-2">
-        <p class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <p :class="eyebrow">
           Progress
         </p>
         <p
@@ -98,6 +98,7 @@ import {
   isEventTimeElapsed,
   taskProgress
 } from '@/lib/tripHelpers'
+import { eyebrow } from '@/lib/typography'
 
 const props = defineProps<{
   trip: Trip

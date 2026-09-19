@@ -103,7 +103,7 @@
         <div
           v-for="traveler in assignedTravelers"
           :key="traveler.id"
-          class="inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-xs"
+          class="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs"
         >
           <Avatar class="size-5">
             <AvatarFallback class="text-[10px]">
@@ -127,7 +127,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ItineraryItem, Trip } from '@/types'
-import { eventTaskProgress, isEventTimeElapsed, areEventTasksComplete, isRecentlyUpdated } from '@/lib/tripHelpers'
+import { eventTaskProgress, isEventTimeElapsed, areEventTasksComplete, isRecentlyUpdated, initials } from '@/lib/tripHelpers'
 import { itemTypeBadgeClass, itemTypeLabel } from '@/lib/itemTypeStyles'
 import ResponseRollup from '@/components/ResponseRollup.vue'
 import { Badge } from '@/components/ui/badge'
@@ -188,13 +188,4 @@ const lastNotify = computed(() => {
     preview
   }
 })
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-}
 </script>

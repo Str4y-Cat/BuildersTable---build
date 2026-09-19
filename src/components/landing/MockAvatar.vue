@@ -1,20 +1,35 @@
 <template>
-  <span
-    class="inline-flex shrink-0 items-center justify-center rounded-full border-2 border-background bg-muted text-[10px] font-medium text-muted-foreground shadow-[inset_0_0_0_1px_var(--border)] transition-all duration-500"
-    :class="[sizeClass, active ? 'bg-foreground text-background shadow-none' : '']"
+  <Avatar
+    :class="
+      cn(
+        sizeClass,
+        'border-2 border-background transition-all duration-500',
+        active
+          ? 'bg-foreground text-background'
+          : 'bg-muted text-muted-foreground shadow-[inset_0_0_0_1px_var(--border)]'
+      )
+    "
   >
-    {{ label }}
-  </span>
+    <AvatarFallback class="bg-transparent text-[10px] font-medium text-inherit">
+      {{ label }}
+    </AvatarFallback>
+  </Avatar>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { cn } from '@/lib/utils'
 
+/**
+ * Landing-only avatar: the real Avatar primitive plus the separator border and
+ * inset ring that keep overlapping stacks legible, and an `active` state the
+ * propagation demo uses to light up affected travelers.
+ */
 const props = withDefaults(
   defineProps<{
     label: string
     size?: 'sm' | 'md'
-    /** Highlighted state — used when the demo marks a traveler as affected. */
     active?: boolean
   }>(),
   { size: 'sm', active: false }

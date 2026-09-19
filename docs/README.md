@@ -32,6 +32,7 @@ Curator manages itinerary → assigns travelers → notifies (simulated) → tra
 5. Work through [06-build-checklist.md](./06-build-checklist.md).
 6. Rehearse the pitch walkthrough with [07-demo-path.md](./07-demo-path.md).
 7. Next UX iteration backlog: [08-mock-feedback.md](./08-mock-feedback.md).
+8. Bring the app screens onto the landing page's system: [09-design-system-unification.md](./09-design-system-unification.md).
 
 ## Doc index
 
@@ -45,6 +46,7 @@ Curator manages itinerary → assigns travelers → notifies (simulated) → tra
 | [06-build-checklist.md](./06-build-checklist.md) | Checkbox implementation order |
 | [07-demo-path.md](./07-demo-path.md) | Pitch rehearsal walkthrough |
 | [08-mock-feedback.md](./08-mock-feedback.md) | Post-baseline UX feedback to implement next |
+| [09-design-system-unification.md](./09-design-system-unification.md) | Work order: align app screens with the landing page's design system |
 
 ## Baseline today
 

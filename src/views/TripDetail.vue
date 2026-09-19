@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <!-- Not found -->
       <div v-if="!trip" class="mx-auto max-w-md py-16 text-center">
-        <h1 class="text-2xl font-bold">Trip not found</h1>
+        <h1 :class="pageTitle">Trip not found</h1>
         <p class="mt-2 text-muted-foreground">
           No trip matches
           <span class="font-medium text-foreground">{{ tripId }}</span>.
@@ -34,7 +34,7 @@
           <section class="space-y-4 lg:col-span-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div class="flex flex-wrap items-baseline gap-2">
-                <h2 class="text-lg font-semibold">Itinerary</h2>
+                <h2 :class="sectionTitle">Itinerary</h2>
                 <span class="text-sm text-muted-foreground">
                   {{ trip.itinerary.length }} events
                 </span>
@@ -137,6 +137,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { ArrowLeft, Plus } from '@lucide/vue'
+import { pageTitle, sectionTitle } from '@/lib/typography'
 
 const route = useRoute()
 const router = useRouter()
