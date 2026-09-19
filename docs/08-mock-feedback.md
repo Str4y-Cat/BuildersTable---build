@@ -2,7 +2,7 @@
 
 Post–Phase 8 UX feedback to implement in the Vue mock. Frontend-only; keep [04-design-themes.md](./04-design-themes.md). Prefer this doc over older screen notes when they conflict.
 
-**Status:** in progress — data model, event panel, and dashboard Kanban done; remaining items in suggested order below.
+**Status:** in progress — through PDF (step 9); New Trip create (step 10) still deferred.
 
 ---
 

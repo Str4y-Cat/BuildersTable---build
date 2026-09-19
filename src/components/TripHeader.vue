@@ -70,6 +70,14 @@
         <ArrowLeft class="mr-2 h-4 w-4" />
         Back to trips
       </Button>
+      <Button
+        variant="outline"
+        title="Download full trip itinerary and documents as PDF"
+        @click="downloadPdf"
+      >
+        <Download class="mr-2 h-4 w-4" />
+        Download PDF
+      </Button>
       <Button :disabled="!firstShareCode" @click="previewTraveler">
         <ExternalLink class="mr-2 h-4 w-4" />
         Preview traveler view
@@ -85,11 +93,12 @@ import { toast } from 'vue-sonner'
 import type { Trip } from '@/types'
 import { displayDateRange, isDateRangeDerived, responseRollup, taskProgress } from '@/lib/tripHelpers'
 import { tripBadgeClass, tripBadgeLabel, tripTagLabel } from '@/lib/tripLabels'
+import { downloadTripPdf } from '@/lib/tripPdf'
 import { useTripsStore } from '@/stores/trips'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { ArrowLeft, ExternalLink } from '@lucide/vue'
+import { ArrowLeft, Download, ExternalLink } from '@lucide/vue'
 
 const props = defineProps<{
   trip: Trip
@@ -130,6 +139,15 @@ function onAutoNotifyChange(value: boolean | 'indeterminate') {
 
 const goBack = () => {
   router.push('/dashboard')
+}
+
+function downloadPdf() {
+  try {
+    downloadTripPdf(props.trip)
+    toast.success('PDF downloaded')
+  } catch {
+    toast.error('Could not generate PDF')
+  }
 }
 
 const previewTraveler = () => {

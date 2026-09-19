@@ -15,14 +15,38 @@
 
       <!-- Found -->
       <template v-else>
-        <header class="space-y-2 border-b pb-6">
-          <h1 class="text-2xl font-bold tracking-tight break-words">{{ trip.name }}</h1>
-          <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
-          <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
-          <p class="pt-2 text-base">
-            Hi {{ traveler.name }}, here’s your itinerary for {{ trip.name }}.
-          </p>
+        <header class="space-y-4 border-b pb-6">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="min-w-0 space-y-2">
+              <h1 class="text-2xl font-bold tracking-tight break-words">{{ trip.name }}</h1>
+              <p v-if="trip.destination" class="text-muted-foreground">{{ trip.destination }}</p>
+              <p class="text-sm text-muted-foreground">{{ dateRange }}</p>
+              <p class="pt-1 text-base">
+                Hi {{ traveler.name }}, here’s your itinerary for {{ trip.name }}.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              class="shrink-0"
+              title="Download your itinerary and documents as PDF"
+              @click="downloadPdf"
+            >
+              <Download class="mr-2 h-4 w-4" />
+              Download PDF
+            </Button>
+          </div>
         </header>
+
+        <!-- Documents at the top (locked decision) -->
+        <section class="space-y-3 border-b py-8">
+          <div class="flex items-baseline justify-between gap-2">
+            <h2 class="text-lg font-semibold">Documents</h2>
+            <span class="text-sm text-muted-foreground">
+              {{ travelerDocuments.length }}
+            </span>
+          </div>
+          <DocumentList :documents="travelerDocuments" />
+        </section>
 
         <section class="space-y-6 py-8">
           <h2 class="text-lg font-semibold">Your schedule</h2>
@@ -52,16 +76,6 @@
           </div>
         </section>
 
-        <section class="space-y-3 border-t py-8">
-          <div class="flex items-baseline justify-between gap-2">
-            <h2 class="text-lg font-semibold">Documents</h2>
-            <span class="text-sm text-muted-foreground">
-              {{ travelerDocuments.length }}
-            </span>
-          </div>
-          <DocumentList :documents="travelerDocuments" />
-        </section>
-
         <footer class="border-t pt-6">
           <Button variant="outline" @click="contactCurator">
             <Mail class="mr-2 h-4 w-4" />
@@ -79,11 +93,12 @@ import { useRoute, useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useTripsStore } from '@/stores/trips'
 import { displayDateRange, documentsForTraveler, entriesForTraveler } from '@/lib/tripHelpers'
+import { downloadTripPdf } from '@/lib/tripPdf'
 import type { ItineraryItem } from '@/types'
 import TravelerEntryCard from '@/components/TravelerEntryCard.vue'
 import DocumentList from '@/components/DocumentList.vue'
 import { Button } from '@/components/ui/button'
-import { Mail } from '@lucide/vue'
+import { Download, Mail } from '@lucide/vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -105,7 +120,7 @@ const dateRange = computed(() => {
     day: 'numeric',
     year: 'numeric'
   })
-  return `${formatter.format(new Date(startDate))} - ${formatter.format(new Date(endDate))}`
+  return `${formatter.format(new Date(startDate))} – ${formatter.format(new Date(endDate))}`
 })
 
 const travelerDocuments = computed(() => {
@@ -143,6 +158,20 @@ const dayGroups = computed(() => {
 
 function goDashboard() {
   router.push('/dashboard')
+}
+
+function downloadPdf() {
+  if (!resolved.value) return
+  try {
+    downloadTripPdf(trip.value, {
+      traveler: traveler.value,
+      items: entriesForTraveler(trip.value, traveler.value.id),
+      documents: travelerDocuments.value
+    })
+    toast.success('PDF downloaded')
+  } catch {
+    toast.error('Could not generate PDF')
+  }
 }
 
 function contactCurator() {
